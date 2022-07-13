@@ -1,9 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Oleo+Script:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  body {
+    @apply bg-neutral text-secondary font-quicksand;
+  }
+  main {
+    @apply h-full;
+  }
+  h1 {
+    @apply text-3xl sm:text-4xl font-bold font-oleo tracking-wide;
+  }
+  h2 {
+    @apply text-xl sm:text-2xl font-medium;
+  }
+  h3 {
+    @apply text-lg sm:text-xl font-medium;
+  }
+  h4 {
+    @apply text-base sm:text-lg font-medium;
+  }
+  h5 {
+    @apply text-sm sm:text-base font-normal;
+  }
+  p {
+    @apply text-sm font-light;
+  }
+  small {
+    @apply text-sm text-gray-600 font-light;
+  }
+  button {
+    @apply bg-secondary text-neutral disabled:bg-gray-300 disabled:text-gray-500 text-sm sm:text-base xl:text-lg 2xl:text-xl font-semibold rounded-full focus:outline-none py-1 px-4;
+  }
 }
 
 @layer component {
+  .FlexColumn {
+    @apply flex flex-col items-center justify-center;
+  }
+  .FlexCenter {
+    @apply flex items-center justify-center;
+  }
+  .FlexAlignCenter {
+    @apply flex items-center;
+  }
+  .FlexJustifyCenter {
+    @apply flex justify-center;
+  }
+  .FlexJustifyEnd {
+    @apply flex justify-end;
+  }
+  .Hover {
+    @apply hover:shadow transform hover:-translate-y-1 duration-300 cursor-pointer;
+  }
 }
