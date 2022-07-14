@@ -7,7 +7,6 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import { auth } from "../firebase";
 import { UserSchema } from "../util/validators";
-
 import { FormInputText } from "../components/Form/FormInputText";
 import { Button } from "../components/UI/Button";
 
@@ -27,7 +26,7 @@ export const Auth = ({ isLogin }) => {
   });
 
   // processing on submit
-  // FIXME: これはContextAPIでグローバルに値を保持した方がよさそう。app.js内で、auth情報によってrouteわけたいから。ただそれだと、ここのエラーメッセージの処理はどうしようかね。
+  // FIXME: これはContextAPIでグローバルに値を保持した方がよさそう。app.js内で、auth情報によってrouteわけたいから。
   // FIXME: そもそも、onSubmitはreact-hook-formの引数として処理されるけど、handleSubmitがそもそもasyncつかってることはないかい？
   const onSubmit = async (data) => {
     const { email, password } = data;
