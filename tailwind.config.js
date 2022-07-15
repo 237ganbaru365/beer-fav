@@ -2,7 +2,19 @@
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#EBA63F",
+        secondary: "#3CBCC3",
+        neutral: "#F7F4E9",
+        accent: "#438945",
+        danger: "#E40C2B",
+      },
+      fontFamily: {
+        oleo: ["Oleo Script", "cursive"],
+        quicksand: ["Quicksand", "sans-serif"],
+      },
+    },
   },
   plugins: [],
 };
