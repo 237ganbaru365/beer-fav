@@ -1,7 +1,5 @@
 import * as yup from "yup";
 
-// loginとsignupでスキーマを分けない場合、エラーが登場しうまく動作しなかった
-
 // signup validation rules
 export const SignupSchema = yup
   .object({
@@ -19,6 +17,7 @@ export const SignupSchema = yup
       .required("Password is a required field")
       .min(6, "Password should be min 6 letters"),
   })
+  //FIXME: それぞれにrequiredつけてるのに、ここにも必要かどうか確認
   .required();
 
 // login vallidation rules
@@ -30,7 +29,6 @@ export const LoginSchema = yup
       .required("Email is a required field"),
     password: yup
       .string()
-      // FIXME: ここの順序とかってそこまで関係ないのかあるのか確認
       .required("Password is a required field")
       .min(6, "Password should be min 6 letters"),
   })

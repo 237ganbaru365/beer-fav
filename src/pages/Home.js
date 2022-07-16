@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { Button } from "../components/UI/Button";
-import icon from "../assets/top-beer.png";
+import icon from "../assets/img/top-beer.png";
 
 export const Home = () => {
   return (
