@@ -5,10 +5,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-import { auth } from "../firebase";
-import { SignupSchema } from "../util/validators";
-import { FormInputText } from "../components/Form/FormInputText";
-import { Button } from "../components/UI/Button";
+import { auth } from "../../firebase";
+import { SignupSchema } from "../../util/validators";
+import { FormInputText } from "../../components/Form/FormInputText";
+import { Button } from "../../components/UI/Button";
 
 export const Signup = () => {
   const navigate = useNavigate();

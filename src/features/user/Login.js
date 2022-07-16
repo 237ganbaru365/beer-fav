@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-import { auth } from "../firebase";
-import { LoginSchema } from "../util/validators";
-import { FormInputText } from "../components/Form/FormInputText";
-import { Button } from "../components/UI/Button";
+import { LoginSchema } from "../../util/validators";
+import { auth } from "../../firebase";
+import { login } from "./userSlice";
+
+import { FormInputText } from "../../components/Form/FormInputText";
+import { Button } from "../../components/UI/Button";
 
 export const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // server error handling
-  //FIXME: ここでのエラーハンドリングをサーバーとクライアントでわけたのは、クライアント側のエラーハンドリングは、react-hook-formがやってくれているので、firbaseから吐き出されたerrを引っ張るためですが、これあってますか？
   const [serverErr, setServerErr] = useState(null);
 
   // setup for RHF
@@ -27,24 +29,23 @@ export const Login = () => {
       email: "",
       password: "",
     },
-    // validation will trigger on the first blur event. After that, it will trigger on every change event.
     mode: "onTouched",
     resolver: yupResolver(LoginSchema),
   });
 
   // processing for signup
-  // FIXME: これはContextAPIでグローバルに値を保持した方がよさそう。app.js内で、auth情報によってrouteわけたいから。
-  // => でも、uncontrolled componentということは、stateではなくてDOMでデータを管理しているので、グローバルでのstate管理ってどういうことになる？
-  // FIXME: そもそも、onSubmitはreact-hook-formの引数として処理されるけど、handleSubmitがそもそもasyncつかってることはないかい？
   const onLogin = async (data) => {
     const { email, password } = data;
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log("Login succeeed!", user);
-      //FIXME: ログイン後の遷移先要確認
+      dispatch(
+        login({
+          email: user.user.email,
+        })
+      );
       navigate("/posts");
     } catch (error) {
-      setServerErr(error.message);
+      setServerErr(error);
     }
   };
 
