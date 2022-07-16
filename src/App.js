@@ -7,16 +7,20 @@ import { Home } from "./pages/Home";
 import { Login } from "./features/user/Login";
 import { Signup } from "./features/user/Signup";
 import { Posts } from "./features/post/Posts";
+import { PrivateRoutes } from "./util/PrivateRoutes";
 
 function App() {
   return (
     <Router>
       <Layout>
         <Routes>
+          {/* FIXME: ここにないパラメふられたらhomeに全部とばす */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/posts" element={<Posts />} />
+          <Route element={<PrivateRoutes />}>
+            <Route path="/posts" element={<Posts />} />
+          </Route>
         </Routes>
       </Layout>
     </Router>
