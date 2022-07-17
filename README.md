@@ -2,25 +2,22 @@
 
 ## About
 
-This app promotes studying by helping users memorize new words.
-Once you log in the app, you can make your own flashcards that contains not only words and their corresponding meanings but also your own example sentences and comments.
-Besides, the feature to shuffle cards enables your brain learn effectively!
-As a language learner, I'm also a frequent user of this app :)
+test
 
 ## Goal
 
-On this project, I aimed to deep-understand how to work with React Hooks such as State Hook and Effect Hook, and also Context API so that I would feel comfortable in managing state in the app. Another thing that I focused on was creating REST API and connecting the app with database, which was such a valuable experience for me to care about both frontend and backend.
+test
 
 ## Challenge
 
-I found it really tough to expect what's happening after every render, especially when I try to let React know what the component needs to do after render such as showing filtered cards or search results. It took me a lot of time to understand how to handle side effects and get components to be rendered as I want to do.
+test
 
 ## Stack
 
 - React
 - TypeScript
-- React Hook Form
 - Redux toolkit
+- React Hook Form
 - Tailwind CSS
 - Firebase Realtime Database
 - Vercel
@@ -34,16 +31,8 @@ I found it really tough to expect what's happening after every render, especiall
 
 ### Home
 
-<img width="1440" alt="flash-home" src="https://user-images.githubusercontent.com/60804249/172283807-36c11832-863f-4656-9f07-74e763582817.png">
+### Login / Signup
 
-### Cards Menu
+### Posts
 
-<img width="1440" alt="flash-cards" src="https://user-images.githubusercontent.com/60804249/172284089-9bfc9492-4f38-4151-8621-01e18c6c4c75.png">
-
-### My Card List
-
-<img width="1440" alt="flash-mycardslist" src="https://user-images.githubusercontent.com/60804249/172284730-98388088-0e01-42a8-80eb-801d5152da4b.png">
-
-### Create Form
-
-<img width="1440" alt="flash-create" src="https://user-images.githubusercontent.com/60804249/172284757-74f98902-2396-49b4-a4d7-b7cb7209e986.png">
+### Create post

@@ -38,8 +38,10 @@ export const Login = () => {
     const { email, password } = data;
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
+      console.log("Login successfully!", user);
       dispatch(
         login({
+          uid: user.user.uid,
           email: user.user.email,
         })
       );
