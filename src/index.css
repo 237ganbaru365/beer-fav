@@ -7,7 +7,7 @@
 
 @layer base {
   body {
-    @apply bg-neutral text-secondary font-quicksand;
+    @apply bg-neutral text-gray-600 font-quicksand;
   }
   main {
     @apply h-full;
@@ -31,7 +31,7 @@
     @apply text-sm text-gray-600 font-light;
   }
   button {
-    @apply bg-secondary text-neutral disabled:bg-gray-300 disabled:text-gray-500 text-sm sm:text-base xl:text-lg 2xl:text-xl font-semibold rounded-full focus:outline-none py-1 px-4;
+    @apply bg-accent text-neutral disabled:bg-gray-300 disabled:text-gray-500 text-sm sm:text-base xl:text-lg 2xl:text-xl font-semibold rounded-full focus:outline-none py-1 px-4;
   }
 }
 
