@@ -57,9 +57,12 @@ export const Signup = () => {
     //FIXME: コンポーネントの切り出し
     <div className="w-2/3 m-auto my-12 bg-white p-4 rounded-xl shadow-md text-center">
       <h1 className="text-center">Sign Up</h1>
+      {/* REVIEW: */}
+      {/* check App.js */}
       {serverErr && (
         <span className="text-danger">{`${serverErr} Please try again`}</span>
       )}
+      {/* <SignUpForm /> */}
       {/* handleSubmit(1st, 2nd) <= 1st arg is for success, 2nd is for error */}
       <form onSubmit={handleSubmit(onSignup)} className="FlexColumn">
         <FormInputText
