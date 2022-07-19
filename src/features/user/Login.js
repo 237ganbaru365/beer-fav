@@ -13,38 +13,65 @@ import { FormInputText } from "../../components/Form/FormInputText";
 import { Button } from "../../components/UI/Button";
 
 export const Login = () => {
+  // REVIEW:
+  // 1. 記述順番
+  // order - (abstract) - (detail = screen)
+  // useXXXX - library
+  // variable / functions - personal
+  // useEffect
+  // if(){}
+  // jsx
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // server error handling
   const [serverErr, setServerErr] = useState(null);
 
-  // setup for RHF
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  // REVIEW:
+  // 2. 意図の伝わる書き方をする、ソースを読み飛ばせるようにしたい
+  const initialValue = {
     defaultValues: {
       email: "",
       password: "",
     },
     mode: "onTouched",
     resolver: yupResolver(LoginSchema),
-  });
+  };
+
+  // setup for RHF
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm(initialValue);
 
   // processing for signup
   const onLogin = async (data) => {
     const { email, password } = data;
     try {
+      //
       const user = await signInWithEmailAndPassword(auth, email, password);
       console.log("Login successfully!", user);
+
+      // REVIEW:
+      // 修正
+
+      // 1. 暗黙的なルールを避けたい、明示的なルールに変えたい
+      // user = null? わかってる人はわかるけど、ルールが隠れてる
+      // isLogin
+
+      // 2. データ何持つべき？
+      // - application scope (global scope) - username to show header
+      // - component scope (local scope)
+
       dispatch(
         login({
           uid: user.user.uid,
           email: user.user.email,
         })
       );
+
       navigate("/posts");
     } catch (error) {
       setServerErr(error);
@@ -59,6 +86,8 @@ export const Login = () => {
       {serverErr && (
         <span className="text-danger">{`${serverErr} Please try again`}</span>
       )}
+      {/* REVIEW: */}
+      {/* <LoginForm /> */}
       <form onSubmit={handleSubmit(onLogin)} className="FlexColumn">
         <FormInputText
           {...register("email")}

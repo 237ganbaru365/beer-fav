@@ -5,17 +5,17 @@ export const userSlice = createSlice({
   initialState: {
     user: null,
     //FIXME: ログインした時にユーザー名をだしたい
-    // username: "",
+    username: "",
   },
   reducers: {
     signup: (state, action) => {
       state.username = action.payload;
     },
     login: (state, action) => {
-      state.user = action.payload;
+      state = action.payload;
     },
     logout: (state) => {
-      state.user = null;
+      state = null;
       state.username = "";
     },
   },
