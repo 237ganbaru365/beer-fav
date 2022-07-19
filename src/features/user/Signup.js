@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-import { auth } from "../../firebase";
 import { SignupSchema } from "../../util/validators";
+import { auth } from "../../firebase";
+import { signup } from "./userSlice";
+
 import { FormInputText } from "../../components/Form/FormInputText";
 import { Button } from "../../components/UI/Button";
 
 export const Signup = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // server error handling
-  //FIXME: ここでのエラーハンドリングをサーバーとクライアントでわけたのは、クライアント側のエラーハンドリングは、react-hook-formがやってくれているので、firbaseから吐き出されたerrを引っ張るためですが、これあってますか？
   const [serverErr, setServerErr] = useState(null);
 
   // setup for RHF
@@ -34,16 +36,19 @@ export const Signup = () => {
   });
 
   // processing for signup
-  // FIXME: これはContextAPIでグローバルに値を保持した方がよさそう。app.js内で、auth情報によってrouteわけたいから。
-  // FIXME: そもそも、onSubmitはreact-hook-formの引数として処理されるけど、handleSubmitがそもそもasyncつかってることはないかい？
   const onSignup = async (data) => {
-    const { email, password } = data;
+    const { username, email, password } = data;
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("Register succeeed!", user);
+      console.log("Registerd successfully!", user);
+      // dispatch(
+      //   signup({
+      //     username,
+      //   })
+      // );
       navigate("/login");
     } catch (error) {
-      setServerErr(error.message);
+      setServerErr(error);
     }
   };
 
