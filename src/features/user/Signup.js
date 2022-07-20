@@ -9,8 +9,8 @@ import { SignupSchema } from "../../util/validators";
 import { auth } from "../../firebase";
 import { signup } from "./userSlice";
 
-import { FormInputText } from "../../components/Form/FormInputText";
-import { Button } from "../../components/UI/Button";
+import { FormInputText } from "../../components/atoms/FormInputText";
+import { Button } from "../../components/atoms/Button";
 
 export const Signup = () => {
   const dispatch = useDispatch();

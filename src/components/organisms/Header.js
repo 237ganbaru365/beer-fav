@@ -5,9 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { auth } from "../../firebase";
 import { logout } from "../../features/user/userSlice";
 
-import { Button } from "../UI/Button";
+import { Button } from "../atoms/Button";
 
 export const Header = () => {
+  // REVIEW:
+  // 1. authenticate by fire-auth: get uid
+  // 2. get user from fire-database by `uid`
+  // 3. get `user.username`
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 

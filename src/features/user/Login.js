@@ -9,8 +9,8 @@ import { LoginSchema } from "../../util/validators";
 import { auth } from "../../firebase";
 import { login } from "./userSlice";
 
-import { FormInputText } from "../../components/Form/FormInputText";
-import { Button } from "../../components/UI/Button";
+import { FormInputText } from "../../components/atoms/FormInputText";
+import { Button } from "../../components/atoms/Button";
 
 export const Login = () => {
   const dispatch = useDispatch();
@@ -20,18 +20,20 @@ export const Login = () => {
   const [serverErr, setServerErr] = useState(null);
 
   // setup for RHF
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const initialHookForm = {
     defaultValues: {
       email: "",
       password: "",
     },
     mode: "onTouched",
     resolver: yupResolver(LoginSchema),
-  });
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm(initialHookForm);
 
   // processing for signup
   const onLogin = async (data) => {

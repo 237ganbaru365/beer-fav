@@ -1,8 +1,8 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import { Layout } from "./components/Layout/Layout";
-import { Home } from "./pages/Home";
+import { Layout } from "./components/organisms/Layout";
+import { Home } from "./features/Home/Home";
 
 import { Login } from "./features/user/Login";
 import { Signup } from "./features/user/Signup";
@@ -12,21 +12,22 @@ import { CreatePost } from "./features/post/CreatePost";
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Layout>
         <Routes>
-          {/* FIXME: ここにないパラメふられたらhomeに全部とばす */}
+          <Route path="*" element={<Navigate to="/" />} />
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route element={<PrivateRoutes />}>
             <Route path="/posts" element={<Posts />} />
+          </Route>
+          <Route element={<PrivateRoutes />}>
             <Route path="/new" element={<CreatePost />} />
           </Route>
-          <Route element={<PrivateRoutes />}></Route>
         </Routes>
       </Layout>
-    </Router>
+    </BrowserRouter>
   );
 }
 

@@ -3,10 +3,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { PostSchema } from "../../util/validators";
-import { addPost, editPost } from "../../app/servises/post-api";
 
-import { FormInputText } from "../../components/Form/FormInputText";
-import { Button } from "../../components/UI/Button";
+import { FormInputText } from "../../components/atoms/FormInputText";
+import { Button } from "../../components/atoms/Button";
 
 export const CreatePost = () => {
   // setup for RHF
@@ -22,18 +21,10 @@ export const CreatePost = () => {
     resolver: yupResolver(PostSchema),
   });
 
-  // processing for add posts
-  // const onAddPost = (data) => {
-  //   addPost(data);
-  // };
-
-  const onEditPost = (data) => {
-    editPost(data);
-  };
   return (
     <>
       <h1>Create a new post</h1>
-      <form onSubmit={handleSubmit(onEditPost)}>
+      <form>
         <FormInputText
           {...register("title")}
           type="title"

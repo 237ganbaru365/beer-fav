@@ -1,8 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu } from "../../components/UI/Menu";
-//FIXME: will use after add logic for fetching db
-// import { NoPosts } from "../../components/UI/NoPosts";
+import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
 
 export const Posts = () => {
@@ -10,8 +8,6 @@ export const Posts = () => {
 
   let content;
 
-  //FIXME: ステータスごとの条件分岐
-  // content = <NoPosts />;
   content = (
     <div className="FlexCenter my-5">
       <Post />

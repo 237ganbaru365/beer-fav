@@ -5,7 +5,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 
-import { Button } from "../../components/UI/Button";
+import { Button } from "../../components/atoms/Button";
 
 export const Post = () => {
   return (
