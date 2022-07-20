@@ -1,26 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  auth: {
+    isLogin: false,
+    uid: "",
+  },
+};
+
 export const userSlice = createSlice({
   name: "user",
-  initialState: {
-    user: null,
-    //FIXME: ログインした時にユーザー名をだしたい
-    // username: "",
-  },
+  initialState,
   reducers: {
-    signup: (state, action) => {
-      state.username = action.payload;
-    },
     login: (state, action) => {
-      state.user = action.payload;
+      state.auth = action.payload;
     },
-    logout: (state) => {
-      state.user = null;
-      state.username = "";
+    logout: (state, action) => {
+      state.auth = action.payload;
     },
   },
 });
 
-export const { signup, login, logout } = userSlice.actions;
+export const { login, logout } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

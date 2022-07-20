@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 
 import { LoginSchema } from "../../util/validators";
 import { auth } from "../../firebase";
@@ -15,9 +15,6 @@ import { Button } from "../../components/atoms/Button";
 export const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // server error handling
-  const [serverErr, setServerErr] = useState(null);
 
   // setup for RHF
   const initialHookForm = {
@@ -35,7 +32,7 @@ export const Login = () => {
     formState: { errors },
   } = useForm(initialHookForm);
 
-  // processing for signup
+  // firebase login
   const onLogin = async (data) => {
     const { email, password } = data;
     try {
@@ -44,23 +41,18 @@ export const Login = () => {
       dispatch(
         login({
           uid: user.user.uid,
-          email: user.user.email,
+          isLogin: true,
         })
       );
       navigate("/posts");
     } catch (error) {
-      setServerErr(error);
+      console.error(error);
     }
   };
 
   return (
-    //FIXME: スタイルの見直し
-    //FIXME: コンポーネントの切り出し
     <div className="w-2/3 m-auto my-12 bg-white p-4 rounded-xl shadow-md text-center">
       <h1 className="text-center">Log In</h1>
-      {serverErr && (
-        <span className="text-danger">{`${serverErr} Please try again`}</span>
-      )}
       <form onSubmit={handleSubmit(onLogin)} className="FlexColumn">
         <FormInputText
           {...register("email")}
@@ -79,7 +71,6 @@ export const Login = () => {
           helperText={errors?.password?.message}
         />
         <Button className="h-12 my-2 px-20 mr-2" content="Login" />
-        {/* FIXME: pタグって、ボタンのように使ってもsemantic的に問題なかったけ？ */}
         <p
           onClick={() => {
             navigate("/signup");

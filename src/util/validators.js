@@ -35,9 +35,10 @@ export const LoginSchema = yup
   .required();
 
 // create post validation rules
-// FIXME: add more schema for posts
 export const PostSchema = yup
   .object({
-    title: yup.string().required("Title is required field"),
+    name: yup.string().required("Name is required field"),
+    store: yup.string().required("Store is required field"),
+    description: yup.string(),
   })
   .required();
