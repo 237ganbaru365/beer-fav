@@ -1,6 +1,6 @@
 import React from "react";
 
-import { MenuOption } from "./MenuOption";
+import { MenuOption } from "../molecules/MenuOption";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import SportsBarIcon from "@mui/icons-material/SportsBar";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
