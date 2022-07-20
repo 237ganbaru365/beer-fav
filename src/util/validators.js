@@ -33,3 +33,11 @@ export const LoginSchema = yup
       .min(6, "Password should be min 6 letters"),
   })
   .required();
+
+// create post validation rules
+// FIXME: add more schema for posts
+export const PostSchema = yup
+  .object({
+    title: yup.string().required("Title is required field"),
+  })
+  .required();

@@ -8,6 +8,7 @@ import { Login } from "./features/user/Login";
 import { Signup } from "./features/user/Signup";
 import { Posts } from "./features/post/Posts";
 import { PrivateRoutes } from "./util/PrivateRoutes";
+import { CreatePost } from "./features/post/CreatePost";
 
 function App() {
   return (
@@ -20,7 +21,9 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route element={<PrivateRoutes />}>
             <Route path="/posts" element={<Posts />} />
+            <Route path="/new" element={<CreatePost />} />
           </Route>
+          <Route element={<PrivateRoutes />}></Route>
         </Routes>
       </Layout>
     </Router>
