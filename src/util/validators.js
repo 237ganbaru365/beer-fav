@@ -40,5 +40,6 @@ export const PostSchema = yup
     name: yup.string().required("Name is required field"),
     store: yup.string().required("Store is required field"),
     description: yup.string(),
+    imgUrl: yup.string(),
   })
   .required();

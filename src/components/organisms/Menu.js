@@ -21,7 +21,7 @@ export const Menu = () => {
         className={`${commonClassName} bg-secondary`}
         icon={<SportsBarIcon color="white" />}
         content="my beers"
-        to="/my-beers"
+        to="/my-posts"
       />
       <MenuOption
         className={`${commonClassName} bg-accent`}
