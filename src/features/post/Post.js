@@ -15,9 +15,6 @@ export const Post = ({ name, store, description, onClick, imgUrl, id }) => {
   const favoriteHandler = () => {
     setIsFav((prev) => !prev);
   };
-
-  const 
-
   return (
     <div className="bg-white rounded-lg shadow-md">
       <div>
