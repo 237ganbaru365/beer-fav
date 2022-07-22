@@ -28,15 +28,11 @@ export const CreatePost = () => {
     const uploadFile = data.file[0];
     const imgRef = ref(storage, `images/${uploadFile.name + v4()}`);
 
-    // console.log("imgRef", imgRef);
-    // console.log("uploadFile", uploadFile);
-
     try {
       // upload file to firebase storage
       await uploadBytes(imgRef, uploadFile);
       const imgUrl = await getDownloadURL(imgRef);
       const newPost = { name, store, description, authUid, imgUrl };
-      console.log(newPost);
 
       // store data to firestore
       await addPost(newPost);
