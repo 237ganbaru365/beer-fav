@@ -33,7 +33,7 @@ export const Login = () => {
     formState: { errors },
   } = useForm(initialHookForm);
 
-  // firebase login
+  // processing for login
   const onLogin = async (data) => {
     const { email, password } = data;
     try {
@@ -52,7 +52,7 @@ export const Login = () => {
   };
 
   return (
-    <Card styles="w-4/5 mx-auto my-32 md:w-2/5">
+    <Card>
       <h1 className="text-center mb-4 text-primary">Log In</h1>
       <LoginForm
         onSubmit={handleSubmit(onLogin)}

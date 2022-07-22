@@ -1,4 +1,6 @@
 import React from "react";
+
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -6,12 +8,14 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import { SignupSchema } from "../../util/validators";
 import { auth } from "../../firebase";
+import { signup } from "./userSlice";
 
 import { Card } from "../../components/atoms/Card";
 import { SignUpForm } from "../../components/organisms/SignUpForm";
 
 export const Signup = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // setup for RHF
   const initialHookForm = {
@@ -32,9 +36,17 @@ export const Signup = () => {
 
   // processing for signup
   const onSignup = async (data) => {
-    const { email, password } = data;
+    const { username, email, password } = data;
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
+      // FIXME: でもここでこの情報をもっていても、signupしてすぐにloginするとは限らないので意味ないから、firebaseから取ってくる必要がある
+      dispatch(
+        signup({
+          username,
+          email,
+          password,
+        })
+      );
       console.log("Registerd successfully!", user);
       navigate("/login");
     } catch (error) {
@@ -43,7 +55,7 @@ export const Signup = () => {
   };
 
   return (
-    <Card styles="w-4/5 mx-auto my-32 md:w-2/5">
+    <Card>
       <h1 className="text-center mb-4 text-primary">Sign Up</h1>
       <SignUpForm
         onSubmit={handleSubmit(onSignup)}
