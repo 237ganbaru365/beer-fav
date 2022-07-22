@@ -30,14 +30,9 @@ export const Header = () => {
       </h2>
       <div className="FlexCenter">
         {/* FIXME: should use username insted of uid */}
-        <h4 className="text-right mx-1">{isAuth && user.auth.uid}</h4>
+        <h4 className="mr-4">{isAuth && user.auth.uid}</h4>
         {isAuth && (
-          <Button
-            color="inherit"
-            onClick={logoutHandler}
-            content="LOG OUT"
-            className="text-emerald-50"
-          ></Button>
+          <Button color="inherit" onClick={logoutHandler} content="LOG OUT" />
         )}
       </div>
     </header>
