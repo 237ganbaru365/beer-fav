@@ -24,17 +24,9 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route element={<PrivateRoutes />}>
             <Route path="/posts" element={<Posts />} />
-          </Route>
-          <Route element={<PrivateRoutes />}>
             <Route path="/new" element={<CreatePost />} />
-          </Route>
-          <Route element={<PrivateRoutes />}>
             <Route path="/edit" element={<EditPost />} />
-          </Route>
-          <Route element={<PrivateRoutes />}>
             <Route path="/favorite" element={<FavoritePosts />} />
-          </Route>
-          <Route element={<PrivateRoutes />}>
             <Route path="/my-posts" element={<MyPosts />} />
           </Route>
         </Routes>

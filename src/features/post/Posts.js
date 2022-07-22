@@ -30,7 +30,7 @@ export const Posts = () => {
   if (posts.length > 0) {
     content = (
       <section className="p-8">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {posts.map((post) => (
             <Post
               {...post}

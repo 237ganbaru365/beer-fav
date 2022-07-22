@@ -5,12 +5,12 @@ import { Button } from "../atoms/Button";
 
 export const HomeActions = () => {
   return (
-    <div className="text-center my-8 md:my-12">
+    <div className="FlexColumn h-64 md:flex-row">
       <Link to="/login">
-        <Button className="h-12 my-2 px-20 mr-2 Hover" content="LOG IN" />
+        <Button className="w-48 mb-4 md:mr-4 md:mb-0" content="LOG IN" />
       </Link>
       <Link to="/signup">
-        <Button className="h-12 my-2 px-20 Hover" content="SIGN UP" />
+        <Button className="w-48" content="SIGN UP" />
       </Link>
     </div>
   );

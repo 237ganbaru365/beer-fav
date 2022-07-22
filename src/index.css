@@ -30,9 +30,6 @@
   small {
     @apply text-sm text-gray-600 font-light;
   }
-  button {
-    @apply bg-accent text-neutral disabled:bg-gray-300 disabled:text-gray-500 text-sm sm:text-base xl:text-lg 2xl:text-xl font-semibold rounded-full focus:outline-none py-1 px-4;
-  }
 }
 
 @layer component {
@@ -50,6 +47,9 @@
   }
   .FlexJustifyEnd {
     @apply flex justify-end;
+  }
+  .WhiteContainer {
+    @apply bg-white shadow-slate-600 shadow-lg rounded-lg p-10 mx-10 sm:mx-20 md:mx-28 lg:mx-40 xl:mx-80 my-20;
   }
   .Hover {
     @apply hover:shadow transform hover:-translate-y-1 duration-300 cursor-pointer;
