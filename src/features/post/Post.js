@@ -15,6 +15,7 @@ export const Post = ({ name, store, description, onClick, imgUrl, id }) => {
   const favoriteHandler = () => {
     setIsFav((prev) => !prev);
   };
+
   return (
     <div className="bg-white rounded-lg shadow-md">
       <div>
@@ -38,7 +39,10 @@ export const Post = ({ name, store, description, onClick, imgUrl, id }) => {
             onClick={favoriteHandler}
           />
         )}
-        <EditIcon className="text-accent" onClick={() => navigate("/edit")} />
+        <EditIcon
+          className="text-accent"
+          onClick={() => navigate(`/edit/${id}`)}
+        />
         <DeleteForeverIcon className="text-danger" onClick={onClick} />
       </div>
     </div>

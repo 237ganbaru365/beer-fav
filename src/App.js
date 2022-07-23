@@ -25,7 +25,7 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route path="/posts" element={<Posts />} />
             <Route path="/new" element={<CreatePost />} />
-            <Route path="/edit" element={<EditPost />} />
+            <Route path="/edit/:id" element={<EditPost />} />
             <Route path="/favorite" element={<FavoritePosts />} />
             <Route path="/my-posts" element={<MyPosts />} />
           </Route>

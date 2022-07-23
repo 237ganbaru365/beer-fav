@@ -35,6 +35,7 @@ export const Posts = () => {
             <Post
               {...post}
               key={post.id}
+              id={post.id}
               onClick={() => deleteHandler(post.id)}
             />
           ))}
