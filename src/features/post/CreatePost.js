@@ -1,7 +1,6 @@
 import React from "react";
 
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 
@@ -17,11 +16,8 @@ export const CreatePost = () => {
   // check authenticated user id
   const authUid = auth.currentUser.uid;
 
-  // setup for RHF
-  const { register, handleSubmit } = useForm();
-
   // processing on submit
-  const onCreate = async (data) => {
+  const createHandler = async (data) => {
     const { name, store, description } = data;
 
     // create file reference
@@ -46,7 +42,7 @@ export const CreatePost = () => {
   return (
     <Card>
       <h1 className="text-center mb-4 text-primary">Create a new post</h1>
-      <PostForm onSubmit={handleSubmit(onCreate)} register={register} />
+      <PostForm isAddMode={true} createHandler={createHandler} />
     </Card>
   );
 };

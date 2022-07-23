@@ -1,16 +1,37 @@
 import React from "react";
 
-import { FormInputText } from "../../components/atoms/FormInputText";
-import { Button } from "../../components/atoms/Button";
-import { FileInput } from "../atoms/FileInput";
+import { useForm } from "react-hook-form";
 
-export const PostForm = ({ onSubmit, register }) => {
+import { FormInputText } from "../../components/atoms/FormInputText";
+import { FileInput } from "../atoms/FileInput";
+import { Button } from "../../components/atoms/Button";
+
+export const PostForm = ({
+  preloadValues,
+  isAddMode,
+  createHandler,
+  editHandler,
+}) => {
+  // set for RHF
+  const { register, handleSubmit } = useForm({
+    defaultValues: preloadValues,
+  });
+
+  // check if edit or create
+  const onSubmit = (data) => {
+    if (isAddMode) {
+      createHandler(data);
+    } else {
+      editHandler(data);
+    }
+  };
+
   return (
-    <form onSubmit={onSubmit} className="FlexColumn">
+    <form onSubmit={handleSubmit(onSubmit)} className="FlexColumn">
       <FormInputText
         {...register("name")}
         type="text"
-        label="Beer name"
+        label="Name"
         sx={{ marginBottom: "1rem", width: "70%" }}
       />
       <FormInputText
@@ -28,7 +49,7 @@ export const PostForm = ({ onSubmit, register }) => {
       <FileInput register={register} />
       <Button
         className="w-1/2 py-2 mb-4 md:w-2/5"
-        content="CREATE"
+        content={isAddMode ? "CREATE" : "UPDATE"}
         type="submit"
       />
     </form>
