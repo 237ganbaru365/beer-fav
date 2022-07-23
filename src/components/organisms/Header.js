@@ -11,9 +11,7 @@ export const Header = () => {
   const dispatch = useDispatch();
 
   // check if user loggedin
-  const user = useSelector((state) => state.user.user);
   const auth = useSelector((state) => state.user.auth);
-
   const isAuth = auth.isLogin;
 
   // logout function
@@ -40,7 +38,7 @@ export const Header = () => {
         {isAuth && (
           <h4 className="mr-4">
             <AccountCircleIcon />
-            {user.username}
+            {auth.uid}
           </h4>
         )}
 

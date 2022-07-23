@@ -5,20 +5,12 @@ const initialState = {
     isLogin: false,
     uid: "",
   },
-  user: {
-    username: "",
-    email: "",
-    password: "",
-  },
 };
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    signup: (state, action) => {
-      state.user = action.payload;
-    },
     login: (state, action) => {
       state.auth = action.payload;
     },
@@ -28,6 +20,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { signup, login, logout } = userSlice.actions;
+export const { login, logout } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
