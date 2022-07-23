@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
+import { auth } from "../../firebase";
 import { logout } from "../../features/user/userSlice";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -11,8 +12,8 @@ export const Header = () => {
   const dispatch = useDispatch();
 
   // check if user loggedin
-  const auth = useSelector((state) => state.user.auth);
-  const isAuth = auth.isLogin;
+  const authUser = useSelector((state) => state.user.auth);
+  const isAuth = authUser.isLogin;
 
   // logout function
   const logoutHandler = () => {
@@ -38,7 +39,7 @@ export const Header = () => {
         {isAuth && (
           <h4 className="mr-4">
             <AccountCircleIcon />
-            {auth.uid}
+            {authUser.uid}
           </h4>
         )}
 
