@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { deletePost, getAllPost } from "../../app/servises/post.services";
+import { useSelector } from "react-redux";
+
+import {
+  deletePost,
+  getAllPost,
+  getFavPosts,
+} from "../../app/servises/post.services";
 
 import { Menu } from "../../components/organisms/Menu";
+import { auth } from "../../firebase";
 import { Post } from "./Post";
 
 export const Posts = () => {
   const [posts, setPosts] = useState([]);
 
-  const getPosts = async () => {
+  const userId = auth.currentUser.uid;
+
+  const getAll = async () => {
     try {
       const data = await getAllPost();
       setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
@@ -18,11 +27,11 @@ export const Posts = () => {
 
   const deleteHandler = async (id) => {
     await deletePost(id);
-    getPosts();
+    getAll();
   };
 
   useEffect(() => {
-    getPosts();
+    getAll();
   }, []);
 
   let content;
@@ -35,7 +44,8 @@ export const Posts = () => {
             <Post
               {...post}
               key={post.id}
-              id={post.id}
+              postId={post.id}
+              userId={userId}
               onClick={() => deleteHandler(post.id)}
             />
           ))}
@@ -49,6 +59,7 @@ export const Posts = () => {
   return (
     <>
       <Menu />
+      <h1 className="text-center mb-4 text-primary">All posts</h1>
       {content}
     </>
   );

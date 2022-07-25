@@ -4,11 +4,30 @@ import { useNavigate } from "react-router-dom";
 import { FormInputText } from "../atoms/FormInputText";
 import { Button } from "../atoms/Button";
 
-export const LoginForm = ({ onSubmit, register, errors }) => {
+export const AuthForm = ({ onSubmit, register, errors, isLoginMode }) => {
   const navigate = useNavigate();
+
+  const changeModeHandler = () => {
+    if (isLoginMode) {
+      navigate("/signup");
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <form onSubmit={onSubmit} className="FlexColumn w-full">
+      {!isLoginMode && (
+        <FormInputText
+          sx={{ marginBottom: "1rem", width: "70%" }}
+          {...register("username")}
+          id="username"
+          type="text"
+          label="User name"
+          error={!!errors.username}
+          helperText={errors?.username?.message}
+        />
+      )}
       <FormInputText
         sx={{ marginBottom: "1rem", width: "70%" }}
         {...register("email")}
@@ -27,15 +46,18 @@ export const LoginForm = ({ onSubmit, register, errors }) => {
         error={!!errors.password}
         helperText={errors?.password?.message}
       />
-      <Button className="w-1/2 py-2 mb-4 md:w-2/5" content="LOG IN" />
-      <button
-        onClick={() => {
-          navigate("/signup");
-        }}
+      <Button
+        className="w-1/2 py-2 mb-4 md:w-2/5"
+        content={isLoginMode ? "LOG IN" : "SIGN UP"}
+      />
+      <p
+        onClick={changeModeHandler}
         className="text-primary font-semibold Hover"
       >
-        You don't have an acount yet?
-      </button>
+        {isLoginMode
+          ? " You don't have an acount yet?"
+          : "You already have an acount?"}
+      </p>
     </form>
   );
 };

@@ -8,6 +8,9 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  query,
+  where,
+  documentId,
 } from "firebase/firestore";
 
 const COLLECTION_NAME = "posts";
@@ -23,19 +26,25 @@ export const getAllPost = () => {
   return getDocs(postColRef);
 };
 
-export const getPost = (id) => {
-  const existPostRef = doc(db, COLLECTION_NAME, id);
-  return getDoc(existPostRef);
+export const getPost = (postId) => {
+  const postDocRef = doc(db, COLLECTION_NAME, postId);
+  return getDoc(postDocRef);
+};
+
+export const getPostByUserId = (userId) => {
+  const q = query(postColRef, where("userId", "==", userId));
+
+  return getDocs(q);
 };
 
 // UPDATE
 export const updatePost = (id, updatedPost) => {
-  const existPostRef = doc(db, COLLECTION_NAME, id);
-  return updateDoc(existPostRef, updatedPost);
+  const postDocRef = doc(db, COLLECTION_NAME, id);
+  return updateDoc(postDocRef, updatedPost);
 };
 
 // DELETE
-export const deletePost = (id) => {
-  const existPostRef = doc(db, COLLECTION_NAME, id);
-  return deleteDoc(existPostRef);
+export const deletePost = (postId) => {
+  const postDocRef = doc(db, COLLECTION_NAME, postId);
+  return deleteDoc(postDocRef);
 };

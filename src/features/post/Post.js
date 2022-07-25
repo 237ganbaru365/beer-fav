@@ -1,19 +1,37 @@
 import React, { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 import EditIcon from "@mui/icons-material/Edit";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { addFavorite } from "../../app/servises/favorite.services";
 
-export const Post = ({ name, store, description, onClick, imgUrl, id }) => {
+export const Post = ({
+  name,
+  store,
+  description,
+  onClick,
+  imgUrl,
+  postId,
+  userId,
+  deleteFavHandler,
+  favId,
+}) => {
   const navigate = useNavigate();
 
-  //FIXME: should use redux for storing as global state
+  //TODO
   const [isFav, setIsFav] = useState(false);
 
-  const favoriteHandler = () => {
-    setIsFav((prev) => !prev);
+  const addFavHandler = async () => {
+    await addFavorite(postId, userId);
+    setIsFav(true);
+  };
+
+  const removeFavHandler = () => {
+    deleteFavHandler(favId);
+    setIsFav(false);
   };
 
   return (
@@ -32,16 +50,16 @@ export const Post = ({ name, store, description, onClick, imgUrl, id }) => {
       </div>
       <div className="p-4 text-right">
         {isFav ? (
-          <FavoriteIcon className="text-primary" onClick={favoriteHandler} />
+          <FavoriteIcon className="text-primary" onClick={removeFavHandler} />
         ) : (
           <FavoriteBorderIcon
             className="text-primary"
-            onClick={favoriteHandler}
+            onClick={addFavHandler}
           />
         )}
         <EditIcon
           className="text-accent"
-          onClick={() => navigate(`/edit/${id}`)}
+          onClick={() => navigate(`/edit/${postId}`)}
         />
         <DeleteForeverIcon className="text-danger" onClick={onClick} />
       </div>
