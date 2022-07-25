@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import { PrivateRoutes } from "./util/PrivateRoutes";
+import { PublicRoutes } from "./util/PublicRoute";
 
 import { Header } from "./components/organisms/Header";
 import { Footer } from "./components/organisms/Footer";
@@ -18,16 +19,19 @@ import { MyPosts } from "./features/post/MyPosts";
 
 function App() {
   // check if user authenticated
-  // FIXME: ここが非同期処理だから、もしかするとheader内でuserを読み込めずにdisplaynameがないとのerrorがブラウザででてる
   const [user, setUser] = useState(null);
 
-  onAuthStateChanged(auth, (authUser) => {
-    if (authUser) {
-      setUser(authUser);
-    } else {
-      setUser(null);
-    }
-  });
+  useEffect(() => {
+    const unSubscribe = onAuthStateChanged(auth, (authUser) => {
+      if (authUser) {
+        setUser(authUser);
+      } else {
+        setUser(null);
+      }
+      // cleanup function
+      return () => unSubscribe();
+    });
+  }, []);
 
   return (
     <BrowserRouter>
@@ -36,8 +40,10 @@ function App() {
         <Routes>
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Auth isLoginMode={true} />} />
-          <Route path="/signup" element={<Auth isLoginMode={false} />} />
+          <Route element={<PublicRoutes user={user} />}>
+            <Route path="/login" element={<Auth isLoginMode={true} />} />
+            <Route path="/signup" element={<Auth isLoginMode={false} />} />
+          </Route>
           <Route element={<PrivateRoutes user={user} />}>
             <Route path="/posts" element={<Posts />} />
             <Route path="/new" element={<CreatePost />} />

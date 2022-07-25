@@ -42,6 +42,7 @@ export const Auth = ({ isLoginMode }) => {
       navigate("/posts");
     } catch (error) {
       console.error(error);
+      alert(error.message);
     }
   };
 
@@ -51,7 +52,7 @@ export const Auth = ({ isLoginMode }) => {
       await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(auth.currentUser, { displayName: username });
       console.log("Create user successfully!");
-      navigate("/login");
+      navigate("/posts");
     } catch (error) {
       console.error(error);
     }
