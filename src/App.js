@@ -8,8 +8,8 @@ import { PrivateRoutes } from "./util/PrivateRoutes";
 import { Header } from "./components/organisms/Header";
 import { Footer } from "./components/organisms/Footer";
 import { Home } from "./features/Home/Home";
-import { Login } from "./features/user/Login";
-import { Signup } from "./features/user/Signup";
+import { Auth } from "./features/user/Auth";
+
 import { Posts } from "./features/post/Posts";
 import { FavoritePosts } from "./features/post/FavoritePosts";
 import { CreatePost } from "./features/post/CreatePost";
@@ -18,6 +18,7 @@ import { MyPosts } from "./features/post/MyPosts";
 
 function App() {
   // check if user authenticated
+  // FIXME: ここが非同期処理だから、もしかするとheader内でuserを読み込めずにdisplaynameがないとのerrorがブラウザででてる
   const [user, setUser] = useState(null);
 
   onAuthStateChanged(auth, (authUser) => {
@@ -28,8 +29,6 @@ function App() {
     }
   });
 
-  console.log(user);
-
   return (
     <BrowserRouter>
       <Header user={user} />
@@ -37,8 +36,8 @@ function App() {
         <Routes>
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Auth isLoginMode={true} />} />
+          <Route path="/signup" element={<Auth isLoginMode={false} />} />
           <Route element={<PrivateRoutes user={user} />}>
             <Route path="/posts" element={<Posts />} />
             <Route path="/new" element={<CreatePost />} />
