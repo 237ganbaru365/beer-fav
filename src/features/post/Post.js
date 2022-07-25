@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { addFav, removeFav } from "./postSlice";
 
 import EditIcon from "@mui/icons-material/Edit";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -8,12 +12,18 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export const Post = ({ name, store, description, onClick, imgUrl, id }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  //FIXME: should use redux for storing as global state
   const [isFav, setIsFav] = useState(false);
 
-  const favoriteHandler = () => {
-    setIsFav((prev) => !prev);
+  const addFavHandler = () => {
+    dispatch(addFav(id));
+    setIsFav(true);
+  };
+
+  const removeFavHandler = () => {
+    dispatch(removeFav(id));
+    setIsFav(false);
   };
 
   return (
@@ -32,11 +42,11 @@ export const Post = ({ name, store, description, onClick, imgUrl, id }) => {
       </div>
       <div className="p-4 text-right">
         {isFav ? (
-          <FavoriteIcon className="text-primary" onClick={favoriteHandler} />
+          <FavoriteIcon className="text-primary" onClick={removeFavHandler} />
         ) : (
           <FavoriteBorderIcon
             className="text-primary"
-            onClick={favoriteHandler}
+            onClick={addFavHandler}
           />
         )}
         <EditIcon

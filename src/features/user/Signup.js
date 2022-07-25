@@ -3,11 +3,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 import { SignupSchema } from "../../util/validators";
 import { auth } from "../../firebase";
-import { addUser } from "../../app/servises/user.services";
 
 import { Card } from "../../components/atoms/Card";
 import { SignUpForm } from "../../components/organisms/SignUpForm";
@@ -25,33 +24,33 @@ export const Signup = () => {
     mode: "onTouched",
     resolver: yupResolver(SignupSchema),
   };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm(initialHookForm);
 
-  // processing for signup
-  const onSignup = async (data) => {
-    const { username, email, password } = data;
+  // register for firebase authentication
+  const signUpHandler = async (username, email, password) => {
     try {
-      // authentication
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("Registerd successfully!", user);
-
-      // store user data to firestore
-      await addUser({
-        user: {
-          username,
-          email,
-          password,
-        },
-      });
-
+      await createUserWithEmailAndPassword(auth, email, password).catch((err) =>
+        console.log(err)
+      );
+      await updateProfile(auth.currentUser, { displayName: username }).catch(
+        (err) => console.log(err)
+      );
+      console.log("Create user successfully!");
       navigate("/login");
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
+  };
+
+  // processing for signup
+  const onSignup = (data) => {
+    const { username, email, password } = data;
+    signUpHandler(username, email, password);
   };
 
   return (

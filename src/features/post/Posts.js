@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { deletePost, getAllPost } from "../../app/servises/post.services";
+import { useSelector } from "react-redux";
+
+import {
+  deletePost,
+  getAllPost,
+  getFavPosts,
+} from "../../app/servises/post.services";
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
 
 export const Posts = () => {
+  const favArr = useSelector((state) => state.post.favorite);
   const [posts, setPosts] = useState([]);
 
-  const getPosts = async () => {
+  // 全部のpostを表示したい時
+  const getAll = async () => {
     try {
       const data = await getAllPost();
       setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
@@ -16,13 +24,22 @@ export const Posts = () => {
     }
   };
 
+  // favoriteのpostだけを表示したい時
+  const getFav = async () => {
+    const data = await getFavPosts(favArr);
+    setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+
   const deleteHandler = async (id) => {
     await deletePost(id);
-    getPosts();
+    //FIXME: ここ、fav or all で条件分岐必要？
+    getAll();
+    getFav();
   };
 
   useEffect(() => {
-    getPosts();
+    getAll();
+    getFav();
   }, []);
 
   let content;
@@ -49,6 +66,7 @@ export const Posts = () => {
   return (
     <>
       <Menu />
+      <h1 className="text-center mb-4 text-primary">All posts</h1>
       {content}
     </>
   );
