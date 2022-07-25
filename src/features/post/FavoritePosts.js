@@ -1,51 +1,62 @@
 import React, { useEffect, useState } from "react";
-
-import { useSelector } from "react-redux";
-
-import { getFavPosts, deletePost } from "../../app/servises/post.services";
+import {
+  getFavoritePostByUserId,
+  removeFavorute,
+} from "../../app/servises/favorite.services";
+import { auth } from "../../firebase";
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
 
 export const FavoritePosts = () => {
-  const favArr = useSelector((state) => state.post.favorite);
-  const [posts, setPosts] = useState([]);
+  const [favPosts, setFavPosts] = useState([]);
 
-  const getPost = async () => {
-    const data = await getFavPosts(favArr);
-    setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  const userId = auth.currentUser.uid;
+
+  const getFavPosts = async () => {
+    try {
+      const data = await getFavoritePostByUserId(userId);
+      setFavPosts(
+        data.docs.map((doc) => ({
+          ...doc.data(),
+          favId: doc.id,
+        }))
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const deleteHandler = async (id) => {
-    await deletePost(id);
-    getPost();
+  const deleteFavHandler = async (id) => {
+    await removeFavorute(id);
+    getFavPosts();
   };
 
   useEffect(() => {
-    getPost();
-  }, [favArr]);
+    getFavPosts();
+    console.log(favPosts);
+  }, []);
 
   let content;
 
-  if (posts.length > 0) {
+  if (favPosts.length > 0) {
     content = (
       <section className="p-8">
         <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {posts.map((post) => (
+          {favPosts.map((post) => (
             <Post
               {...post}
-              key={post.id}
-              id={post.id}
-              onClick={() => deleteHandler(post.id)}
+              key={post.favId}
+              favId={post.favId}
+              deleteFavHandler={deleteFavHandler(post.favId)}
             />
           ))}
         </div>
       </section>
     );
-  } else if (posts.length <= 0) {
-    content = <h2 className="text-center">No post yet...</h2>;
+  } else if (favPosts.length <= 0) {
+    content = <h2 className="text-center">No favorite yet...</h2>;
   }
-
   return (
     <>
       <Menu />

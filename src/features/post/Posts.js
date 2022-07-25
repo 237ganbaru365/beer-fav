@@ -8,13 +8,14 @@ import {
 } from "../../app/servises/post.services";
 
 import { Menu } from "../../components/organisms/Menu";
+import { auth } from "../../firebase";
 import { Post } from "./Post";
 
 export const Posts = () => {
-  const favArr = useSelector((state) => state.post.favorite);
   const [posts, setPosts] = useState([]);
 
-  // 全部のpostを表示したい時
+  const userId = auth.currentUser.uid;
+
   const getAll = async () => {
     try {
       const data = await getAllPost();
@@ -24,22 +25,13 @@ export const Posts = () => {
     }
   };
 
-  // favoriteのpostだけを表示したい時
-  const getFav = async () => {
-    const data = await getFavPosts(favArr);
-    setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  };
-
   const deleteHandler = async (id) => {
     await deletePost(id);
-    //FIXME: ここ、fav or all で条件分岐必要？
     getAll();
-    getFav();
   };
 
   useEffect(() => {
     getAll();
-    getFav();
   }, []);
 
   let content;
@@ -52,7 +44,8 @@ export const Posts = () => {
             <Post
               {...post}
               key={post.id}
-              id={post.id}
+              postId={post.id}
+              userId={userId}
               onClick={() => deleteHandler(post.id)}
             />
           ))}

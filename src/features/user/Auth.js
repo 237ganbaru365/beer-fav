@@ -36,6 +36,7 @@ export const Auth = ({ isLoginMode }) => {
   // login handler
   const loginHandler = async (email, password) => {
     try {
+      // authenticated
       const data = await signInWithEmailAndPassword(auth, email, password);
       console.log("Login successfully!", data);
       dispatch(login());

@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 
-import { auth, storage } from "../../firebase";
+import { storage } from "../../firebase";
 import { getPost, updatePost } from "../../app/servises/post.services";
 
 import { Card } from "../../components/atoms/Card";

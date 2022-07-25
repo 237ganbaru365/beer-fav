@@ -1,28 +1,36 @@
 import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-
-import { addFav, removeFav } from "./postSlice";
 
 import EditIcon from "@mui/icons-material/Edit";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { addFavorite } from "../../app/servises/favorite.services";
 
-export const Post = ({ name, store, description, onClick, imgUrl, id }) => {
+export const Post = ({
+  name,
+  store,
+  description,
+  onClick,
+  imgUrl,
+  postId,
+  userId,
+  deleteFavHandler,
+  favId,
+}) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
+  //TODO
   const [isFav, setIsFav] = useState(false);
 
-  const addFavHandler = () => {
-    dispatch(addFav(id));
+  const addFavHandler = async () => {
+    await addFavorite(postId, userId);
     setIsFav(true);
   };
 
   const removeFavHandler = () => {
-    dispatch(removeFav(id));
+    deleteFavHandler(favId);
     setIsFav(false);
   };
 
@@ -51,7 +59,7 @@ export const Post = ({ name, store, description, onClick, imgUrl, id }) => {
         )}
         <EditIcon
           className="text-accent"
-          onClick={() => navigate(`/edit/${id}`)}
+          onClick={() => navigate(`/edit/${postId}`)}
         />
         <DeleteForeverIcon className="text-danger" onClick={onClick} />
       </div>

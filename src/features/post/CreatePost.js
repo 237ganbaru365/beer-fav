@@ -5,6 +5,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 
 import { auth, storage } from "../../firebase";
+import { addUserByAuthId } from "../../app/servises/user.services";
 import { addPost } from "../../app/servises/post.services";
 
 import { Card } from "../../components/atoms/Card";
@@ -14,7 +15,8 @@ export const CreatePost = () => {
   const navigate = useNavigate();
 
   // check authenticated user id
-  const authUid = auth.currentUser.uid;
+  const userId = auth.currentUser.uid;
+  const { displayName, email } = auth.currentUser;
 
   // processing on submit
   const createHandler = async (data) => {
@@ -28,11 +30,20 @@ export const CreatePost = () => {
       // upload file to firebase storage
       await uploadBytes(imgRef, uploadFile);
       const imgUrl = await getDownloadURL(imgRef);
-      const newPost = { name, store, description, authUid, imgUrl };
+      const newPost = { name, store, description, userId, imgUrl };
 
-      // store data to firestore
-      await addPost(newPost);
-      console.log("created successfully!");
+      // store post data to firestore
+      const postData = await addPost(newPost);
+      console.log("created post successfully!", postData);
+
+      // store user data to firestore
+      const userData = {
+        username: displayName,
+        email,
+      };
+      await addUserByAuthId(userData, userId);
+      console.log("created user successfully!");
+
       navigate("/posts");
     } catch (error) {
       console.error(error);
