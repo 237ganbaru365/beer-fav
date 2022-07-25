@@ -21,24 +21,20 @@ export const addPost = (newPost) => {
   return addDoc(postColRef, newPost);
 };
 
-// get user favorite posts
-// FIXME: favArrの中身がない状態で、favoriteページに飛ぶと、エラーが発生している！
-export const getFavPosts = async (favArr) => {
-  if (favArr.length > 0) {
-    const q = query(postColRef, where(documentId(), "in", favArr));
-    return await getDocs(q);
-  }
-  return;
-};
-
 // READ
 export const getAllPost = () => {
   return getDocs(postColRef);
 };
 
-export const getPost = (id) => {
-  const postDocRef = doc(db, COLLECTION_NAME, id);
+export const getPost = (postId) => {
+  const postDocRef = doc(db, COLLECTION_NAME, postId);
   return getDoc(postDocRef);
+};
+
+export const getPostByUserId = (userId) => {
+  const q = query(postColRef, where("userId", "==", userId));
+
+  return getDocs(q);
 };
 
 // UPDATE
@@ -48,7 +44,7 @@ export const updatePost = (id, updatedPost) => {
 };
 
 // DELETE
-export const deletePost = (id) => {
-  const postDocRef = doc(db, COLLECTION_NAME, id);
+export const deletePost = (postId) => {
+  const postDocRef = doc(db, COLLECTION_NAME, postId);
   return deleteDoc(postDocRef);
 };
