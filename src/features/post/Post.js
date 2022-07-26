@@ -1,36 +1,40 @@
 import React, { useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import {
+  addFavorite,
+  removeFavorite,
+} from "../../app/servises/favorite.services";
+import { auth } from "../../firebase";
 
-import EditIcon from "@mui/icons-material/Edit";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { addFavorite } from "../../app/servises/favorite.services";
+import { DotLine } from "../../components/atoms/DotLine";
+import { OnlyAuthActions } from "../../components/organisms/OnlyAuthActions";
 
 export const Post = ({
   name,
   store,
   description,
-  onClick,
   imgUrl,
+  author,
+  onClick,
   postId,
   userId,
-  deleteFavHandler,
   favId,
 }) => {
-  const navigate = useNavigate();
-
   //TODO
   const [isFav, setIsFav] = useState(false);
+
+  // get auth user
+  const authUser = auth.currentUser;
 
   const addFavHandler = async () => {
     await addFavorite(postId, userId);
     setIsFav(true);
   };
 
-  const removeFavHandler = () => {
-    deleteFavHandler(favId);
+  const removeFavHandler = async () => {
+    await removeFavorite(favId);
     setIsFav(false);
   };
 
@@ -43,12 +47,17 @@ export const Post = ({
           className="rounded-t-lg object-cover h-32 w-full opacity-70"
         />
       </div>
-      <div className="p-4">
+      <p className="text-right p-2 text-sm">
+        created by: <span className="font-bold">{author}</span>
+      </p>
+      <div className="px-4">
         <h2>{name}</h2>
-        <h3>{store}</h3>
+        <h4>{store}</h4>
+        <DotLine />
         <p>{description}</p>
+        <DotLine />
       </div>
-      <div className="p-4 text-right">
+      <div className="p-2 text-right">
         {isFav ? (
           <FavoriteIcon className="text-primary" onClick={removeFavHandler} />
         ) : (
@@ -57,11 +66,12 @@ export const Post = ({
             onClick={addFavHandler}
           />
         )}
-        <EditIcon
-          className="text-accent"
-          onClick={() => navigate(`/edit/${postId}`)}
+        <OnlyAuthActions
+          onClick={onClick}
+          postId={postId}
+          author={author}
+          authUser={authUser}
         />
-        <DeleteForeverIcon className="text-danger" onClick={onClick} />
       </div>
     </div>
   );

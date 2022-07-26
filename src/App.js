@@ -11,7 +11,7 @@ import { Footer } from "./components/organisms/Footer";
 import { Home } from "./features/Home/Home";
 import { Auth } from "./features/user/Auth";
 
-import { Posts } from "./features/post/Posts";
+import { AllPosts } from "./features/post/AllPosts";
 import { FavoritePosts } from "./features/post/FavoritePosts";
 import { CreatePost } from "./features/post/CreatePost";
 import { EditPost } from "./features/post/EditPost";
@@ -45,11 +45,11 @@ function App() {
             <Route path="/signup" element={<Auth isLoginMode={false} />} />
           </Route>
           <Route element={<PrivateRoutes user={user} />}>
-            <Route path="/posts" element={<Posts />} />
+            <Route path="/posts" element={<AllPosts />} />
+            <Route path="/my-posts" element={<MyPosts />} />
+            <Route path="/favorite" element={<FavoritePosts />} />
             <Route path="/new" element={<CreatePost />} />
             <Route path="/edit/:id" element={<EditPost />} />
-            <Route path="/favorite" element={<FavoritePosts />} />
-            <Route path="/my-posts" element={<MyPosts />} />
           </Route>
         </Routes>
       </main>

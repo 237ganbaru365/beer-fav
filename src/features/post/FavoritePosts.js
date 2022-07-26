@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  getFavoritePostByUserId,
-  removeFavorute,
-} from "../../app/servises/favorite.services";
+
 import { auth } from "../../firebase";
+import { getFavoritePostByUserId } from "../../app/servises/favorite.services";
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
@@ -13,9 +11,10 @@ export const FavoritePosts = () => {
 
   const userId = auth.currentUser.uid;
 
-  const getFavPosts = async () => {
+  const getFavorite = async () => {
     try {
       const data = await getFavoritePostByUserId(userId);
+
       setFavPosts(
         data.docs.map((doc) => ({
           ...doc.data(),
@@ -27,14 +26,8 @@ export const FavoritePosts = () => {
     }
   };
 
-  const deleteFavHandler = async (id) => {
-    await removeFavorute(id);
-    getFavPosts();
-  };
-
   useEffect(() => {
-    getFavPosts();
-    console.log(favPosts);
+    getFavorite();
   }, []);
 
   let content;
@@ -44,12 +37,7 @@ export const FavoritePosts = () => {
       <section className="p-8">
         <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {favPosts.map((post) => (
-            <Post
-              {...post}
-              key={post.favId}
-              favId={post.favId}
-              deleteFavHandler={deleteFavHandler(post.favId)}
-            />
+            <Post {...post} key={post.favId} favId={post.favId} />
           ))}
         </div>
       </section>

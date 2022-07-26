@@ -1,33 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
-import {
-  deletePost,
-  getAllPost,
-  getFavPosts,
-} from "../../app/servises/post.services";
+import { getAllPost } from "../../app/servises/post.services";
 
 import { Menu } from "../../components/organisms/Menu";
-import { auth } from "../../firebase";
 import { Post } from "./Post";
 
-export const Posts = () => {
+export const AllPosts = () => {
   const [posts, setPosts] = useState([]);
-
-  const userId = auth.currentUser.uid;
 
   const getAll = async () => {
     try {
       const data = await getAllPost();
-      setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setPosts(data.docs.map((doc) => ({ ...doc.data(), postId: doc.id })));
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const deleteHandler = async (id) => {
-    await deletePost(id);
-    getAll();
   };
 
   useEffect(() => {
@@ -43,17 +30,16 @@ export const Posts = () => {
           {posts.map((post) => (
             <Post
               {...post}
-              key={post.id}
-              postId={post.id}
-              userId={userId}
-              onClick={() => deleteHandler(post.id)}
+              key={post.postId}
+              postId={post.postId}
+              author={post.username}
             />
           ))}
         </div>
       </section>
     );
   } else if (posts.length <= 0) {
-    content = <h2 className="text-center">No post yet...</h2>;
+    content = <h2 className="text-center">No posts yet...</h2>;
   }
 
   return (

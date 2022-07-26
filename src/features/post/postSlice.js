@@ -3,15 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 export const postSlice = createSlice({
   name: "post",
   initialState: {
-    favorite: [],
+    isFavorite: false,
   },
   reducers: {
-    addFav: (state, action) => {
-      state.favorite.push(action.payload);
+    addFav: (state) => {
+      state.isFavorite = true;
     },
-    removeFav: (state, action) => {
-      // FIXME: これ、removeできてないです！
-      state.favorite.filter((item) => item !== action.payload);
+    removeFav: (state) => {
+      state.isFavorite = false;
     },
   },
 });

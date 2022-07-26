@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 
 import { auth } from "../../firebase";
-import { getPostByUserId, deletePost } from "../../app/servises/post.services";
+import { getPostByUserId } from "../../app/servises/post.services";
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
 
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
+
   const userId = auth.currentUser.uid;
 
-  const getMyPosts = async () => {
+  const getMine = async () => {
     try {
       const data = await getPostByUserId(userId);
       setMyPosts(
@@ -24,14 +25,8 @@ export const MyPosts = () => {
     }
   };
 
-  const deleteHandler = async (id) => {
-    await deletePost(id);
-    getMyPosts();
-  };
-
   useEffect(() => {
-    getMyPosts();
-    console.log(myPosts);
+    getMine();
   }, []);
 
   let content;
@@ -41,12 +36,7 @@ export const MyPosts = () => {
       <section className="p-8">
         <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {myPosts.map((post) => (
-            <Post
-              {...post}
-              key={post.myPostId}
-              myPostId={post.myPostId}
-              onClick={() => deleteHandler(post.myPostId)}
-            />
+            <Post {...post} key={post.myPostId} myPostId={post.myPostId} />
           ))}
         </div>
       </section>
