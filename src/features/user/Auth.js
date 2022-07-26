@@ -1,6 +1,5 @@
 import React from "react";
 
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,6 +10,7 @@ import {
 } from "firebase/auth";
 
 import { LoginSchema, SignupSchema } from "../../util/validators";
+import { addUserByAuthId } from "../../app/servises/user.services";
 import { auth } from "../../firebase";
 import { login } from "./userSlice";
 
@@ -19,7 +19,6 @@ import { AuthForm } from "../../components/organisms/AuthForm";
 
 export const Auth = ({ isLoginMode }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   // setup for RHF
   const initialHookForm = {
@@ -37,13 +36,12 @@ export const Auth = ({ isLoginMode }) => {
   const loginHandler = async (email, password) => {
     try {
       // authenticated
-      const data = await signInWithEmailAndPassword(auth, email, password);
-      console.log("Login successfully!", data);
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("Login successfully!");
+
       dispatch(login());
-      navigate("/posts");
     } catch (error) {
       console.error(error);
-      alert(error.message);
     }
   };
 
@@ -52,8 +50,19 @@ export const Auth = ({ isLoginMode }) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(auth.currentUser, { displayName: username });
+
       console.log("Create user successfully!");
-      navigate("/posts");
+
+      // store user data to firestore
+      const userId = auth.currentUser.uid;
+      const { displayName } = auth.currentUser;
+
+      const userData = {
+        username: displayName,
+        email,
+      };
+      await addUserByAuthId(userData, userId);
+      console.log("Store user data successfully!");
     } catch (error) {
       console.error(error);
     }

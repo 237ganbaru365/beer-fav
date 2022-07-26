@@ -23,10 +23,10 @@ export const addFavorite = (postId, userId) => {
 export const getFavoritePostByUserId = async (userId) => {
   const q = query(favoriteColRef, where("userId", "==", userId));
 
-  const snaphsot = await getDocs(q);
+  const snaphshot = await getDocs(q);
 
   let postIdArr = [];
-  snaphsot.forEach((doc) => {
+  snaphshot.forEach((doc) => {
     postIdArr.push(doc.data().postId);
   });
 
@@ -35,7 +35,17 @@ export const getFavoritePostByUserId = async (userId) => {
   return getDocs(q2);
 };
 
-export const removeFavorute = (id) => {
-  const favDocRef = doc(db, COLLECTION_NAME, id);
+// export const removeFavorite = (userId, postId) => {
+//   const q = query(
+//     favoriteColRef,
+//     where("userId", "==", userId),
+//     where("postId", "==", postId)
+//   );
+
+//   return deleteDoc(q);
+// };
+
+export const removeFavorite = (favId) => {
+  const favDocRef = doc(db, COLLECTION_NAME, favId);
   return deleteDoc(favDocRef);
 };

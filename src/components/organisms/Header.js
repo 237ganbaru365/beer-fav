@@ -9,6 +9,7 @@ import { logout } from "../../features/user/userSlice";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Button } from "../atoms/Button";
 
+// FIXME: signinした直後は、usernameが取得できていない。非同期処理によるもの？
 export const Header = ({ user }) => {
   const dispatch = useDispatch();
 
