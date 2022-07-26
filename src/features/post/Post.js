@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import {
   addFavorite,
@@ -7,10 +6,10 @@ import {
 } from "../../app/servises/favorite.services";
 import { auth } from "../../firebase";
 
-import EditIcon from "@mui/icons-material/Edit";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { DotLine } from "../../components/atoms/DotLine";
+import { OnlyAuthActions } from "../../components/organisms/OnlyAuthActions";
 
 export const Post = ({
   name,
@@ -23,29 +22,11 @@ export const Post = ({
   userId,
   favId,
 }) => {
-  const navigate = useNavigate();
-
   //TODO
   const [isFav, setIsFav] = useState(false);
 
   // get auth user
   const authUser = auth.currentUser;
-
-  let onlyAuthActions;
-
-  if (authUser.displayName === author) {
-    onlyAuthActions = (
-      <>
-        <EditIcon
-          className="text-accent"
-          onClick={() => navigate(`/edit/${postId}`)}
-        />
-        <DeleteForeverIcon className="text-danger" onClick={onClick} />
-      </>
-    );
-  } else {
-    onlyAuthActions = <></>;
-  }
 
   const addFavHandler = async () => {
     await addFavorite(postId, userId);
@@ -69,12 +50,14 @@ export const Post = ({
       <p className="text-right p-2 text-sm">
         created by: <span className="font-bold">{author}</span>
       </p>
-      <div className="p-4">
+      <div className="px-4">
         <h2>{name}</h2>
-        <h3>{store}</h3>
+        <h4>{store}</h4>
+        <DotLine />
         <p>{description}</p>
+        <DotLine />
       </div>
-      <div className="p-4 text-right">
+      <div className="p-2 text-right">
         {isFav ? (
           <FavoriteIcon className="text-primary" onClick={removeFavHandler} />
         ) : (
@@ -83,7 +66,12 @@ export const Post = ({
             onClick={addFavHandler}
           />
         )}
-        {onlyAuthActions}
+        <OnlyAuthActions
+          onClick={onClick}
+          postId={postId}
+          author={author}
+          authUser={authUser}
+        />
       </div>
     </div>
   );
