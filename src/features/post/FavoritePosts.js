@@ -37,7 +37,12 @@ export const FavoritePosts = () => {
       <section className="p-8">
         <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {favPosts.map((post) => (
-            <Post {...post} key={post.favId} favId={post.favId} />
+            <Post
+              {...post}
+              key={post.favId}
+              favId={post.favId}
+              author={post.username}
+            />
           ))}
         </div>
       </section>

@@ -20,6 +20,7 @@ export const addFavorite = (postId, userId) => {
   return addDoc(favoriteColRef, newFavorite);
 };
 
+// FIXME:
 export const getFavoritePostByUserId = async (userId) => {
   const q = query(favoriteColRef, where("userId", "==", userId));
 

@@ -17,6 +17,7 @@ export const AllPosts = () => {
     }
   };
 
+
   useEffect(() => {
     getAll();
   }, []);
@@ -33,6 +34,7 @@ export const AllPosts = () => {
               key={post.postId}
               postId={post.postId}
               author={post.username}
+              
             />
           ))}
         </div>

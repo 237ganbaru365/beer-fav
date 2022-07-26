@@ -9,6 +9,7 @@ import { Post } from "./Post";
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
 
+  console.log("myPosts", myPosts);
   const userId = auth.currentUser.uid;
 
   const getMine = async () => {
@@ -36,7 +37,12 @@ export const MyPosts = () => {
       <section className="p-8">
         <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {myPosts.map((post) => (
-            <Post {...post} key={post.myPostId} myPostId={post.myPostId} />
+            <Post
+              {...post}
+              key={post.myPostId}
+              myPostId={post.myPostId}
+              author={post.username}
+            />
           ))}
         </div>
       </section>
