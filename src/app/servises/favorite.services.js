@@ -20,7 +20,7 @@ export const addFavorite = (postId, userId) => {
   return addDoc(favoriteColRef, newFavorite);
 };
 
-// FIXME:
+// FIXME: 自分が作成したポストにしかfav追加できない
 export const getFavoritePostByUserId = async (userId) => {
   const q = query(favoriteColRef, where("userId", "==", userId));
 
@@ -35,16 +35,6 @@ export const getFavoritePostByUserId = async (userId) => {
 
   return getDocs(q2);
 };
-
-// export const removeFavorite = (userId, postId) => {
-//   const q = query(
-//     favoriteColRef,
-//     where("userId", "==", userId),
-//     where("postId", "==", postId)
-//   );
-
-//   return deleteDoc(q);
-// };
 
 export const removeFavorite = (favId) => {
   const favDocRef = doc(db, COLLECTION_NAME, favId);

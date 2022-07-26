@@ -9,7 +9,6 @@ import { Post } from "./Post";
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
 
-  console.log("myPosts", myPosts);
   const userId = auth.currentUser.uid;
 
   const getMine = async () => {
