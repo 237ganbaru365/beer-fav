@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
-  addFavorite,
-  removeFavorite,
-} from "../../app/servises/favorite.services";
+  addUserFavorite,
+  getUserByAuthId,
+  removeUserFavorite,
+} from "../../app/servises/user.services";
 import { auth } from "../../firebase";
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -22,20 +23,49 @@ export const Post = ({
   userId,
   favId,
 }) => {
-  //TODO
-  const [isFav, setIsFav] = useState(false);
+  const [favList, setFavList] = useState([]);
 
   // get auth user
   const authUser = auth.currentUser;
 
+  // ログイン済みのuserId取得
+  const authId = authUser.uid;
+
+  // user のfavorites 配列を取得
+  const getFavList = async () => {
+    try {
+      const data = await getUserByAuthId(authId);
+
+      const userFavorites = await data.data().favorites;
+
+      setFavList([...userFavorites]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getFavList();
+  }, []);
+
+  // もしも、addFavoriteされたら、そのpostIdをpush
+
   const addFavHandler = async () => {
-    await addFavorite(postId, userId);
-    setIsFav(true);
+    setFavList([...favList, postId]);
+    try {
+      await addUserFavorite(authId, ...favList);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const removeFavHandler = async () => {
-    await removeFavorite(favId);
-    setIsFav(false);
+    setFavList(favList.filter((fav, index) => fav !== postId));
+    try {
+      await removeUserFavorite(authId, ...favList);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -58,14 +88,17 @@ export const Post = ({
         <DotLine />
       </div>
       <div className="p-2 text-right">
-        {isFav ? (
+        {/* {isFav ? (
           <FavoriteIcon className="text-primary" onClick={removeFavHandler} />
         ) : (
           <FavoriteBorderIcon
             className="text-primary"
             onClick={addFavHandler}
           />
-        )}
+        )} */}
+        <FavoriteIcon className="text-primary" onClick={removeFavHandler} />
+        <FavoriteBorderIcon className="text-primary" onClick={addFavHandler} />
+
         <OnlyAuthActions
           onClick={onClick}
           postId={postId}
