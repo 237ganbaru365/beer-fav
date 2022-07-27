@@ -4,17 +4,21 @@ import { useNavigate } from "react-router-dom";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 
-import { auth, storage } from "../../firebase";
+import { auth, db, storage } from "../../firebase";
 import { addPost } from "../../app/servises/post.services";
 
 import { Card } from "../../components/atoms/Card";
 import { PostForm } from "../../components/organisms/PostForm";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addMyPostId } from "../user/userSlice";
+import { doc, updateDoc } from "firebase/firestore";
 
 export const CreatePost = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { myPostIdList } = useSelector((state) => state.user.user);
+  // console.log("myPostIdList", myPostIdList);
 
   // check authenticated user
   const { uid, displayName } = auth.currentUser;
@@ -44,8 +48,18 @@ export const CreatePost = () => {
       const postData = await addPost(newPost);
       console.log("created post successfully!", postData);
 
-      // set postid to user state
       const myPostId = postData.id;
+
+      // store user data to firestore
+      const userDocRef = doc(db, "users", uid);
+
+      updateDoc(userDocRef, {
+        myPostList: [...myPostIdList, myPostId],
+      })
+        .then((res) => console.log(res))
+        .catch((err) => console.error(err));
+
+      // set postid to user state
       dispatch(
         addMyPostId({
           myPostId,
