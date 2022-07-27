@@ -12,7 +12,7 @@ import {
 import { LoginSchema, SignupSchema } from "../../util/validators";
 import { addUserByAuthId } from "../../app/servises/user.services";
 import { auth } from "../../firebase";
-import { login, setUser, signup } from "./userSlice";
+import { login, signup } from "./userSlice";
 
 import { Card } from "../../components/atoms/Card";
 import { AuthForm } from "../../components/organisms/AuthForm";
@@ -43,19 +43,18 @@ export const Auth = ({ isLoginMode }) => {
       const userId = auth.currentUser.uid;
       const { displayName, token } = auth.currentUser;
 
-      dispatch(
-        login({
-          auth: {
-            email,
-            userId,
-            token,
-          },
-          user: {
-            username: displayName,
-            userId,
-          },
-        })
-      );
+      const authData = {
+        email,
+        userId,
+        token,
+      };
+
+      const userData = {
+        username: displayName,
+        userId,
+      };
+
+      dispatch(login({ auth: authData, user: userData }));
     } catch (error) {
       console.error(error);
     }
