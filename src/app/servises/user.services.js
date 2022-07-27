@@ -3,19 +3,14 @@ import { db } from "../../firebase";
 import {
   arrayRemove,
   arrayUnion,
-  collection,
   doc,
-  documentId,
   getDoc,
-  query,
   setDoc,
   updateDoc,
-  where,
+  onSnapshot,
 } from "firebase/firestore";
-import { getPost } from "./post.services";
 
 const COLLECTION_NAME = "users";
-const userColRef = collection(db, COLLECTION_NAME);
 
 // READ
 export const getUserByAuthId = (authId) => {
@@ -25,6 +20,7 @@ export const getUserByAuthId = (authId) => {
 };
 
 // CREATE
+// since users colection is stored by authId(userId), not random documentId
 export const addUserByAuthId = (userData, authId) => {
   return setDoc(doc(db, COLLECTION_NAME, authId), userData);
 };

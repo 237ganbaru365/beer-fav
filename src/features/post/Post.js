@@ -18,27 +18,29 @@ export const Post = ({
   description,
   imgUrl,
   author,
-  onClick,
+  deleteHandler,
   postId,
-  userId,
-  favId,
 }) => {
-  const [favList, setFavList] = useState([]);
+  const [isFav, setIsFav] = useState(false);
+
+  // react側でuserがもつfavListを更新する
+  // FIXME: ここでstateもつべきじゃないので、後でけします
+  // const [favList, setFavList] = useState([]);
 
   // get auth user
   const authUser = auth.currentUser;
-
-  // ログイン済みのuserId取得
   const authId = authUser.uid;
 
-  // user のfavorites 配列を取得
+  // user のfavorites 配列をdbから取得
   const getFavList = async () => {
     try {
       const data = await getUserByAuthId(authId);
 
-      const userFavorites = await data.data().favorites;
+      const userFavList = await data.data().favorites;
 
-      setFavList([...userFavorites]);
+      console.log("userFavList", userFavList);
+
+      setFavList([...userFavList]);
     } catch (error) {
       console.error(error);
     }
@@ -46,21 +48,29 @@ export const Post = ({
 
   useEffect(() => {
     getFavList();
+    // console.log("first render: favlist", favList);
   }, []);
 
-  // もしも、addFavoriteされたら、そのpostIdをpush
+  console.log("favlist", favList);
 
   const addFavHandler = async () => {
-    setFavList([...favList, postId]);
-    try {
-      await addUserFavorite(authId, ...favList);
-    } catch (error) {
-      console.error(error);
-    }
+    // setFavList([...favList, postId]);
+
+    // 自分自身に新たな要素を追加するときは、アロー関数つかったやり方じゃないとバグる
+    setFavList((prev) => {
+      return [...prev, postId];
+    });
+
+    // try {
+    //   await addUserFavorite(authId, ...favList);
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   const removeFavHandler = async () => {
-    setFavList(favList.filter((fav, index) => fav !== postId));
+    setFavList(favList.filter((fav) => fav !== postId));
+    console.log("render when remove fav: favlist", favList);
     try {
       await removeUserFavorite(authId, ...favList);
     } catch (error) {
@@ -88,19 +98,16 @@ export const Post = ({
         <DotLine />
       </div>
       <div className="p-2 text-right">
-        {/* {isFav ? (
+        {isFav ? (
           <FavoriteIcon className="text-primary" onClick={removeFavHandler} />
         ) : (
           <FavoriteBorderIcon
             className="text-primary"
             onClick={addFavHandler}
           />
-        )} */}
-        <FavoriteIcon className="text-primary" onClick={removeFavHandler} />
-        <FavoriteBorderIcon className="text-primary" onClick={addFavHandler} />
-
+        )}
         <OnlyAuthActions
-          onClick={onClick}
+          deleteHandler={deleteHandler}
           postId={postId}
           author={author}
           authUser={authUser}

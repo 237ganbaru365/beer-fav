@@ -63,6 +63,8 @@ export const Auth = ({ isLoginMode }) => {
       };
       await addUserByAuthId(userData, userId);
       console.log("Store user data successfully!");
+
+      // set user state
     } catch (error) {
       console.error(error);
     }

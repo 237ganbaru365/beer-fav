@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { auth } from "../../firebase";
-import { getPostByUserId } from "../../app/servises/post.services";
+import { getPostByUserId, deletePost } from "../../app/servises/post.services";
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
@@ -25,6 +25,11 @@ export const MyPosts = () => {
     }
   };
 
+  const deleteHandler = async (ID) => {
+    await deletePost(ID);
+    getMine();
+  };
+
   useEffect(() => {
     getMine();
   }, []);
@@ -41,6 +46,7 @@ export const MyPosts = () => {
               key={post.myPostId}
               myPostId={post.myPostId}
               author={post.username}
+              deleteHandler={() => deleteHandler(post.myPostId)}
             />
           ))}
         </div>

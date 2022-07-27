@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 import { auth } from "../../firebase";
-import { getFavoritePostByUserId } from "../../app/servises/favorite.services";
+import {
+  getFavoritePostByAuthId,
+  deletePost,
+} from "../../app/servises/post.services";
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
@@ -9,11 +12,11 @@ import { Post } from "./Post";
 export const FavoritePosts = () => {
   const [favPosts, setFavPosts] = useState([]);
 
-  const userId = auth.currentUser.uid;
+  const authId = auth.currentUser.uid;
 
   const getFavorite = async () => {
     try {
-      const data = await getFavoritePostByUserId(userId);
+      const data = await getFavoritePostByAuthId(authId);
 
       setFavPosts(
         data.docs.map((doc) => ({
@@ -26,9 +29,14 @@ export const FavoritePosts = () => {
     }
   };
 
+  const deleteHandler = async (ID) => {
+    await deletePost(ID);
+    getFavorite();
+  };
+
   useEffect(() => {
     getFavorite();
-  }, []);
+  }, [favPosts]);
 
   let content;
 
@@ -42,6 +50,7 @@ export const FavoritePosts = () => {
               key={post.favId}
               favId={post.favId}
               author={post.username}
+              deleteHandler={() => deleteHandler(post.favId)}
             />
           ))}
         </div>
