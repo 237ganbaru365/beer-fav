@@ -12,7 +12,7 @@ import {
 import { LoginSchema, SignupSchema } from "../../util/validators";
 import { addUserByAuthId } from "../../app/servises/user.services";
 import { auth } from "../../firebase";
-import { login, setUser } from "./userSlice";
+import { login, signup } from "./userSlice";
 
 import { Card } from "../../components/atoms/Card";
 import { AuthForm } from "../../components/organisms/AuthForm";
@@ -39,7 +39,22 @@ export const Auth = ({ isLoginMode }) => {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("Login successfully!");
 
-      dispatch(login());
+      // set user state for login
+      const userId = auth.currentUser.uid;
+      const { displayName, token } = auth.currentUser;
+
+      const authData = {
+        email,
+        userId,
+        token,
+      };
+
+      const userData = {
+        username: displayName,
+        userId,
+      };
+
+      dispatch(login({ auth: authData, user: userData }));
     } catch (error) {
       console.error(error);
     }
@@ -55,7 +70,7 @@ export const Auth = ({ isLoginMode }) => {
 
       // store user data to firestore
       const userId = auth.currentUser.uid;
-      const { displayName } = auth.currentUser;
+      const { displayName, token } = auth.currentUser;
 
       const userData = {
         username: displayName,
@@ -64,12 +79,18 @@ export const Auth = ({ isLoginMode }) => {
       await addUserByAuthId(userData, userId);
       console.log("Store user data successfully!");
 
-      // set user state
+      // set user state for signup
       dispatch(
-        setUser({
-          userId,
-          username: displayName,
-          email,
+        signup({
+          auth: {
+            email,
+            userId,
+            token,
+          },
+          user: {
+            username: displayName,
+            userId,
+          },
         })
       );
     } catch (error) {
@@ -77,7 +98,7 @@ export const Auth = ({ isLoginMode }) => {
     }
   };
 
-  // processing for signup
+  // processing for submit
   const onSubmit = (data) => {
     const { username, email, password } = data;
     if (isLoginMode) {
