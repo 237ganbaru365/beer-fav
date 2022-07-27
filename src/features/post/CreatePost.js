@@ -9,9 +9,12 @@ import { addPost } from "../../app/servises/post.services";
 
 import { Card } from "../../components/atoms/Card";
 import { PostForm } from "../../components/organisms/PostForm";
+import { useDispatch } from "react-redux";
+import { addMyPostId } from "../user/userSlice";
 
 export const CreatePost = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // check authenticated user
   const { uid, displayName } = auth.currentUser;
@@ -40,6 +43,14 @@ export const CreatePost = () => {
       // store post data to firestore
       const postData = await addPost(newPost);
       console.log("created post successfully!", postData);
+
+      // set postid to user state
+      const myPostId = postData.id;
+      dispatch(
+        addMyPostId({
+          myPostId,
+        })
+      );
 
       navigate("/posts");
     } catch (error) {
