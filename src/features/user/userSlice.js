@@ -2,8 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLogin: false,
-  auth: null, // { token?, email?, uid? }
-  user: null, // { username, userId, myPosts, favPosts}
+  user: null, // { username, userId, myPosts, favPosts} // firestore user table
 };
 
 export const userSlice = createSlice({
@@ -11,15 +10,13 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     signup: (state, action) => {
-      const { auth, user } = action.payload;
+      const { user } = action.payload;
       state.isLogin = true;
-      state.auth = auth;
       state.user = user;
     },
     login: (state, action) => {
-      const { auth, user } = action.payload;
+      const { user } = action.payload;
       state.isLogin = true;
-      state.auth = auth;
       state.user = user;
     },
     logout: (state, action) => {

@@ -10,7 +10,10 @@ import {
 } from "firebase/auth";
 
 import { LoginSchema, SignupSchema } from "../../util/validators";
-import { addUserByAuthId } from "../../app/servises/user.services";
+import {
+  addUserByAuthId,
+  getUserByUserId,
+} from "../../app/servises/user.services";
 import { auth } from "../../firebase";
 import { login, signup } from "./userSlice";
 
@@ -40,21 +43,28 @@ export const Auth = ({ isLoginMode }) => {
       console.log("Login successfully!");
 
       // set user state for login
-      const userId = auth.currentUser.uid;
-      const { displayName, token } = auth.currentUser;
+      const authUser = auth.currentUser;
 
       const authData = {
-        email,
-        userId,
-        token,
+        email: authUser.email,
+        userId: authUser.uid,
+        username: authUser.displayName,
       };
 
-      const userData = {
-        username: displayName,
-        userId,
+      const initUser = async () => {
+        // これは、await 以下で使いたい非同期処理のfunc内でerrorをthrowした場合のみ、trycatchでエラーをキャッチできる
+        try {
+          const userFetchResult = await getUserByUserId(authUser.uid);
+
+          const userData = userFetchResult.data();
+
+          dispatch(login({ auth: authData, user: userData }));
+        } catch (error) {
+          console.log(error);
+        }
       };
 
-      dispatch(login({ auth: authData, user: userData }));
+      initUser();
     } catch (error) {
       console.error(error);
     }
