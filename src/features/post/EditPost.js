@@ -15,6 +15,8 @@ export const EditPost = () => {
   const params = useParams();
   const [post, setPost] = useState(null);
 
+  const postId = params.id;
+
   const editHandler = async (data) => {
     const { name, store, description } = data;
 
@@ -39,11 +41,11 @@ export const EditPost = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getPost(params.id);
+      const data = await getPost(postId);
       setPost(data.data());
     };
     fetchData();
-  }, []);
+  }, [postId]);
 
   return (
     <Card>
