@@ -2,7 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLogin: false,
-  user: null, // { username, userId, myPosts, favPosts} // firestore user table
+  user: {
+    username: "",
+    userId: "",
+    myPostIdList: [],
+    favPostIdList: [],
+  }, // { username, userId, myPosts, favPosts} // firestore user table
 };
 
 export const userSlice = createSlice({
@@ -21,8 +26,7 @@ export const userSlice = createSlice({
     },
     logout: (state, action) => {
       state.isLogin = false;
-      state.auth = null;
-      state.user = null;
+      state.user = initialState.user;
     },
     addMyPostId: (state, action) => {
       const { myPostId } = action.payload;

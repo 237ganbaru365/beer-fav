@@ -45,12 +45,6 @@ export const Auth = ({ isLoginMode }) => {
       // set user state for login
       const authUser = auth.currentUser;
 
-      const authData = {
-        email: authUser.email,
-        userId: authUser.uid,
-        username: authUser.displayName,
-      };
-
       const initUser = async () => {
         // これは、await 以下で使いたい非同期処理のfunc内でerrorをthrowした場合のみ、trycatchでエラーをキャッチできる
         try {
@@ -58,7 +52,19 @@ export const Auth = ({ isLoginMode }) => {
 
           const userData = userFetchResult.data();
 
-          dispatch(login({ auth: authData, user: userData }));
+          dispatch(
+            login({
+              user: {
+                ...userData,
+                myPostIdList: userData.myPostIdList
+                  ? userData.myPostIdList
+                  : [],
+                favPostIdList: userData.favPostIdList
+                  ? userData.favPostIdList
+                  : [],
+              },
+            })
+          );
         } catch (error) {
           console.log(error);
         }
@@ -80,7 +86,7 @@ export const Auth = ({ isLoginMode }) => {
 
       // store user data to firestore
       const userId = auth.currentUser.uid;
-      const { displayName, token } = auth.currentUser;
+      const { displayName } = auth.currentUser;
 
       const userData = {
         username: displayName,
@@ -92,11 +98,6 @@ export const Auth = ({ isLoginMode }) => {
       // set user state for signup
       dispatch(
         signup({
-          auth: {
-            email,
-            userId,
-            token,
-          },
           user: {
             username: displayName,
             userId,
