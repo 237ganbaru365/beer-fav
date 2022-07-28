@@ -1,10 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { auth, db } from "../../firebase";
-import { getPostByUserId } from "../../app/servises/post.services";
-
-import { Menu } from "../../components/organisms/Menu";
-import { Post } from "./Post";
+import { db } from "../../firebase";
 import { useSelector } from "react-redux";
 import {
   collection,
@@ -14,17 +10,16 @@ import {
   where,
 } from "firebase/firestore";
 
+import { Menu } from "../../components/organisms/Menu";
+import { Post } from "./Post";
+
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
-  // redux stateからuserデータをとってくる
-  const { user } = useSelector((state) => state.user);
 
-  // myPostIdList のデータをとる
+  const { user } = useSelector((state) => state.user);
   const myPostIdList = user.myPostIdList;
 
-  console.log("myPostIdList", myPostIdList);
-
-  // getMyPosts ファンクションつくる
+  //TODO: getmyPostsをservicesに切り分けてる
   const getMyPosts = useCallback(async () => {
     const postColRef = collection(db, "posts");
 
@@ -40,25 +35,6 @@ export const MyPosts = () => {
       }))
     );
   }, [myPostIdList]);
-
-  // getMyPosts を実行
-  // getMyPosts();
-
-  // const userId = auth.currentUser.uid;
-
-  // const getMine = async () => {
-  //   try {
-  //     const data = await getPostByUserId(userId);
-  //     setMyPosts(
-  //       data.docs.map((doc) => ({
-  //         ...doc.data(),
-  //         myPostId: doc.id,
-  //       }))
-  //     );
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   useEffect(() => {
     getMyPosts();
