@@ -12,6 +12,7 @@ import {
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
+import { deletePost } from "../../app/servises/post.services";
 
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
@@ -19,7 +20,6 @@ export const MyPosts = () => {
   const { user } = useSelector((state) => state.user);
   const myPostIdList = user.myPostIdList;
 
-  //TODO: getmyPostsをservicesに切り分けてる
   const getMyPosts = useCallback(async () => {
     const postColRef = collection(db, "posts");
 
@@ -33,6 +33,11 @@ export const MyPosts = () => {
       }))
     );
   }, [myPostIdList]);
+
+  const deleteHandler = async (postId) => {
+    await deletePost(postId);
+    getMyPosts();
+  };
 
   useEffect(() => {
     getMyPosts();
@@ -50,6 +55,7 @@ export const MyPosts = () => {
               key={post.postId}
               myPostId={post.postId}
               author={post.username}
+              deleteHandler={() => deleteHandler(post.postId)}
             />
           ))}
         </div>

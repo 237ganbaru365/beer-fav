@@ -4,7 +4,12 @@ import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-export const OnlyAuthActions = ({ authUser, author, postId, onClick }) => {
+export const OnlyAuthActions = ({
+  authUser,
+  author,
+  postId,
+  deleteHandler,
+}) => {
   const navigate = useNavigate();
   let content;
 
@@ -15,7 +20,7 @@ export const OnlyAuthActions = ({ authUser, author, postId, onClick }) => {
           className="text-accent"
           onClick={() => navigate(`/edit/${postId}`)}
         />
-        <DeleteForeverIcon className="text-danger" onClick={onClick} />
+        <DeleteForeverIcon className="text-danger" onClick={deleteHandler} />
       </>
     );
   } else {

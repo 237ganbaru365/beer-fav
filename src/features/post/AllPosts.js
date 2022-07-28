@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { getAllPost } from "../../app/servises/post.services";
+import { deletePost, getAllPost } from "../../app/servises/post.services";
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
@@ -15,6 +15,11 @@ export const AllPosts = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const deleteHandler = async (postId) => {
+    await deletePost(postId);
+    getAll();
   };
 
   useEffect(() => {
@@ -33,6 +38,7 @@ export const AllPosts = () => {
               key={post.postId}
               postId={post.postId}
               author={post.username}
+              deleteHandler={() => deleteHandler(post.postId)}
             />
           ))}
         </div>
