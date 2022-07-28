@@ -7,7 +7,7 @@ const initialState = {
     userId: "",
     myPostIdList: [],
     favPostIdList: [],
-  }, // { username, userId, myPosts, favPosts} // firestore user table
+  },
 };
 
 export const userSlice = createSlice({
@@ -24,7 +24,7 @@ export const userSlice = createSlice({
       state.isLogin = true;
       state.user = user;
     },
-    logout: (state, action) => {
+    logout: (state) => {
       state.isLogin = false;
       state.user = initialState.user;
     },
@@ -38,10 +38,20 @@ export const userSlice = createSlice({
         state.user.myPostIdList = myPostIdList;
       }
     },
+    addFavPostId: (state, action) => {
+      const { postId } = action.payload;
+
+      if (state.user.favPostIdList && state.user.favPostIdList.length > 0) {
+        state.user.favPostIdList.push(postId);
+      } else {
+        const favPostIdList = [postId];
+        state.user.favPostIdList = favPostIdList;
+      }
+    },
   },
 });
 
-export const { signup, login, logout, setUser, addMyPostId } =
+export const { signup, login, logout, setUser, addMyPostId, addFavPostId } =
   userSlice.actions;
 
 export const userReducer = userSlice.reducer;

@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 
-import {
-  addFavorite,
-  removeFavorite,
-} from "../../app/servises/favorite.services";
-import { auth } from "../../firebase";
+import { doc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase";
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { DotLine } from "../../components/atoms/DotLine";
 import { OnlyAuthActions } from "../../components/organisms/OnlyAuthActions";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavPostId } from "../user/userSlice";
 
 export const Post = ({
   name,
@@ -22,8 +21,16 @@ export const Post = ({
   userId,
   favId,
 }) => {
-  //TODO
+  // FIXME: あとでけす
   const [isFav, setIsFav] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const { favPostIdList } = useSelector((state) => state.user.user);
+
+  // get auth user
+  const authUser = auth.currentUser;
+  const authUid = authUser.uid;
 
   // ログインしているユーザーのステートとって
 
@@ -33,18 +40,25 @@ export const Post = ({
 
   // else non active
 
-  // get auth user
-  const authUser = auth.currentUser;
-
   const addFavHandler = async () => {
-    await addFavorite(postId, userId);
-    setIsFav(true);
+    // store user data to firestore
+    const userDocRef = doc(db, "users", authUid);
+
+    updateDoc(userDocRef, {
+      favPostIdList: [...favPostIdList, postId],
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
+
+    // set postid to user state
+    dispatch(
+      addFavPostId({
+        postId,
+      })
+    );
   };
 
-  const removeFavHandler = async () => {
-    await removeFavorite(favId);
-    setIsFav(false);
-  };
+  const removeFavHandler = async () => {};
 
   return (
     <div className="bg-white rounded-lg shadow-md">
