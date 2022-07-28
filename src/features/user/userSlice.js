@@ -40,7 +40,6 @@ export const userSlice = createSlice({
     },
     addFavPostId: (state, action) => {
       const { postId } = action.payload;
-
       if (state.user.favPostIdList && state.user.favPostIdList.length > 0) {
         state.user.favPostIdList.push(postId);
       } else {
@@ -48,10 +47,27 @@ export const userSlice = createSlice({
         state.user.favPostIdList = favPostIdList;
       }
     },
+    removeFavPostId: (state, action) => {
+      const { postId } = action.payload;
+      if (state.user.favPostIdList && state.user.favPostIdList.length > 0) {
+        const newFavPostIdList = state.user.favPostIdList.filter(
+          (id) => id !== postId
+        );
+        state.user.favPostIdList = newFavPostIdList;
+      } else {
+        return;
+      }
+    },
   },
 });
 
-export const { signup, login, logout, setUser, addMyPostId, addFavPostId } =
-  userSlice.actions;
+export const {
+  signup,
+  login,
+  logout,
+  addMyPostId,
+  addFavPostId,
+  removeFavPostId,
+} = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
