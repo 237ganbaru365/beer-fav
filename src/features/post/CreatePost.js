@@ -18,7 +18,6 @@ export const CreatePost = () => {
   const dispatch = useDispatch();
 
   const { myPostIdList } = useSelector((state) => state.user.user);
-  console.log("myPostIdList", myPostIdList);
 
   // check authenticated user
   const { uid, displayName } = auth.currentUser;
