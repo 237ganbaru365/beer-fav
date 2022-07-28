@@ -1,13 +1,16 @@
 import React from "react";
 
-import { Hero } from "../../components/organisms/Hero";
-import { HomeActions } from "../../components/organisms/HomeActions";
-
 export const Home = () => {
   return (
     <>
-      <Hero />
-      <HomeActions />
+      <section className="h-full bg-primary FlexCenter">
+        <div className="text-center">
+          <h1 className="text-9xl text-dark">Cheers!</h1>
+          <span className="text-dark">
+            Remember your precious beer experience.
+          </span>
+        </div>
+      </section>
     </>
   );
 };

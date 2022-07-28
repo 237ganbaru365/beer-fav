@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { signOut } from "firebase/auth";
 
 import { auth } from "../../firebase";
@@ -20,19 +20,29 @@ export const Header = ({ user }) => {
   };
 
   return (
-    <header className="bg-primary text-emerald-50 h-16 flex items-center justify-between px-3 py-2">
-      <h2 className="font-oleo">
+    <header className="h-16 min-w-full flex items-center px-8 fixed top-0 left-0 z-30 backdrop-blur font-nova text-darker">
+      <h2 className="basis-1/6 text-2xl font-bold">
         {user ? <Link to="/posts">Cheers!</Link> : <Link to="/">Cheers!</Link>}
       </h2>
-      <div className="FlexCenter">
+      <ul className="basis-1/2 grid gap-4 text-xl">
+        <NavLink to="/posts">All</NavLink>
+        <NavLink to="/favorite">Favorites</NavLink>
+        <NavLink to="/my-posts">MyPosts</NavLink>
+      </ul>
+      <div className="basis-1/3 flex justify-end">
         {user && (
-          <h4 className="mr-4">
-            <AccountCircleIcon />
-            {user.displayName}
-          </h4>
+          <>
+            <h4 className="mr-4">
+              <AccountCircleIcon />
+              {user.displayName}
+            </h4>
+            <Button color="inherit" onClick={logoutHandler} content="LOG OUT" />
+          </>
         )}
-        {user && (
-          <Button color="inherit" onClick={logoutHandler} content="LOG OUT" />
+        {!user && (
+          <>
+            <Button content="SIGN UP" />
+          </>
         )}
       </div>
     </header>

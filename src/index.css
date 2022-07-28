@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Oleo+Script:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;0,700;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
@@ -13,7 +13,7 @@
     @apply h-full;
   }
   h1 {
-    @apply text-3xl sm:text-4xl font-bold font-oleo tracking-wide;
+    @apply text-3xl sm:text-4xl font-bold font-nova tracking-wide;
   }
   h2 {
     @apply text-xl sm:text-2xl font-medium;
@@ -26,9 +26,6 @@
   }
   h5 {
     @apply text-sm sm:text-base font-normal;
-  }
-  small {
-    @apply text-sm text-gray-600 font-light;
   }
 }
 

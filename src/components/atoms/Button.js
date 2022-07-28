@@ -9,7 +9,7 @@ export const Button = memo(
         type={type}
         onClick={onClick}
         disabled={disabled}
-        className={`bg-secondary text-neutral px-4 py-1 focus:outline-none font-semibold md:py-2 rounded-3xl ${className}`}
+        className={`bg-dark text-neutral px-4 py-1 focus:outline-none font-semibold md:py-2 rounded-3xl ${className}`}
       >
         {content}
       </button>
