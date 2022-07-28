@@ -1,9 +1,14 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addFavPostId, removeFavPostId } from "../user/userSlice";
 import { doc, updateDoc } from "firebase/firestore";
 
+import {
+  addFavPostId,
+  removeFavPostId,
+  removeMyPostId,
+} from "../user/userSlice";
 import { auth, db } from "../../firebase";
+import { deletePost } from "../../app/servises/post.services";
 
 import { DotLine } from "../../components/atoms/DotLine";
 import { OnlyAuthActions } from "../../components/organisms/OnlyAuthActions";
@@ -16,15 +21,41 @@ export const Post = ({
   imgUrl,
   author,
   postId,
-  deleteHandler,
+  reloadPosts,
 }) => {
   const dispatch = useDispatch();
 
-  const { favPostIdList } = useSelector((state) => state.user.user);
+  const { favPostIdList, myPostIdList } = useSelector(
+    (state) => state.user.user
+  );
 
   // get auth user
   const authUser = auth.currentUser;
   const authUid = authUser.uid;
+
+  const deleteHandler = async (postId) => {
+    // delete the post from post db
+    await deletePost(postId);
+
+    // delete the post from user db
+    const userDocRef = doc(db, "users", authUid);
+
+    const newMyPostIdList = myPostIdList.filter((id) => id !== postId);
+
+    await updateDoc(userDocRef, {
+      myPostIdList: newMyPostIdList,
+    });
+
+    // delete the post from user redux state
+    dispatch(
+      removeMyPostId({
+        postId,
+      })
+    );
+
+    // update page
+    reloadPosts();
+  };
 
   const addFavHandler = async () => {
     // store user data to firestore
@@ -90,7 +121,7 @@ export const Post = ({
           addFavHandler={addFavHandler}
         />
         <OnlyAuthActions
-          deleteHandler={deleteHandler}
+          deleteHandler={() => deleteHandler(postId)}
           postId={postId}
           author={author}
           authUser={authUser}

@@ -38,8 +38,21 @@ export const userSlice = createSlice({
         state.user.myPostIdList = myPostIdList;
       }
     },
+    removeMyPostId: (state, action) => {
+      const { postId } = action.payload;
+
+      if (state.user.myPostIdList && state.user.myPostIdList.length > 0) {
+        const newMyPostIdList = state.user.myPostIdList.filter(
+          (id) => id !== postId
+        );
+        state.user.myPostIdList = newMyPostIdList;
+      } else {
+        return;
+      }
+    },
     addFavPostId: (state, action) => {
       const { postId } = action.payload;
+
       if (state.user.favPostIdList && state.user.favPostIdList.length > 0) {
         state.user.favPostIdList.push(postId);
       } else {
@@ -49,6 +62,7 @@ export const userSlice = createSlice({
     },
     removeFavPostId: (state, action) => {
       const { postId } = action.payload;
+
       if (state.user.favPostIdList && state.user.favPostIdList.length > 0) {
         const newFavPostIdList = state.user.favPostIdList.filter(
           (id) => id !== postId
@@ -68,6 +82,7 @@ export const {
   addMyPostId,
   addFavPostId,
   removeFavPostId,
+  removeMyPostId,
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
