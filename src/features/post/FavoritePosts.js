@@ -12,7 +12,6 @@ import {
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
-import { deletePost } from "../../app/servises/post.services";
 
 export const FavoritePosts = () => {
   const [favPosts, setFavPosts] = useState([]);
@@ -35,11 +34,6 @@ export const FavoritePosts = () => {
     );
   }, [favPostIdList]);
 
-  const deleteHandler = async (postId) => {
-    await deletePost(postId);
-    getFavoritePosts();
-  };
-
   useEffect(() => {
     getFavoritePosts();
   }, [getFavoritePosts]);
@@ -56,7 +50,7 @@ export const FavoritePosts = () => {
               key={post.postId}
               favId={post.postId}
               author={post.username}
-              deleteHandler={() => deleteHandler(post.postId)}
+              reloadPosts={getFavoritePosts}
             />
           ))}
         </div>

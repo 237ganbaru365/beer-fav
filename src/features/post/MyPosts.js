@@ -12,7 +12,6 @@ import {
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
-import { deletePost } from "../../app/servises/post.services";
 
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
@@ -34,11 +33,6 @@ export const MyPosts = () => {
     );
   }, [myPostIdList]);
 
-  const deleteHandler = async (postId) => {
-    await deletePost(postId);
-    getMyPosts();
-  };
-
   useEffect(() => {
     getMyPosts();
   }, [getMyPosts]);
@@ -55,7 +49,7 @@ export const MyPosts = () => {
               key={post.postId}
               myPostId={post.postId}
               author={post.username}
-              deleteHandler={() => deleteHandler(post.postId)}
+              reloadPosts={getMyPosts}
             />
           ))}
         </div>
