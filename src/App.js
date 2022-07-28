@@ -20,7 +20,9 @@ import { MyPosts } from "./features/post/MyPosts";
 function App() {
   // check if user authenticated
   const [user, setUser] = useState(null);
+  // const uid = auth.currentUser.uid;
 
+  // firebaseの動きをチェックするためのuseEffect
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (authUser) => {
       if (authUser) {
@@ -32,6 +34,14 @@ function App() {
       return () => unSubscribe();
     });
   }, []);
+
+  //TODO:fireauthがログインしているなら、userデータをfirestoreからfetchして、stateを更新
+  // useEffect(() => {
+  //   // firebase isLogin true
+  //   // const user = await getUserByUserId(uid)
+  //   // const userData = { }
+  //   // disatch(login({ user: userData }))
+  // }, [uid]);
 
   return (
     <BrowserRouter>

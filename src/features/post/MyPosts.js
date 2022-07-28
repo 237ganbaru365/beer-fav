@@ -1,7 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import { auth } from "../../firebase";
-import { getPostByUserId } from "../../app/servises/post.services";
+import { db } from "../../firebase";
+import { useSelector } from "react-redux";
+import {
+  collection,
+  documentId,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
@@ -9,25 +16,29 @@ import { Post } from "./Post";
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
 
-  const userId = auth.currentUser.uid;
+  const { user } = useSelector((state) => state.user);
+  const myPostIdList = user.myPostIdList;
 
-  const getMine = async () => {
-    try {
-      const data = await getPostByUserId(userId);
-      setMyPosts(
-        data.docs.map((doc) => ({
-          ...doc.data(),
-          myPostId: doc.id,
-        }))
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //TODO: getmyPostsをservicesに切り分けてる
+  const getMyPosts = useCallback(async () => {
+    const postColRef = collection(db, "posts");
+
+    // firebaseのクエリをつくる、postのドキュメントの中で、そのdocumentIdがmyPostIdListに含まれているもの
+    const q = query(postColRef, where(documentId(), "in", myPostIdList));
+
+    // getPostsにそのクエリを渡して、myposts を取得
+    const result = await getDocs(q);
+    setMyPosts(
+      result.docs.map((doc) => ({
+        ...doc.data(),
+        myPostId: doc.id,
+      }))
+    );
+  }, [myPostIdList]);
 
   useEffect(() => {
-    getMine();
-  }, []);
+    getMyPosts();
+  }, [getMyPosts]);
 
   let content;
 
