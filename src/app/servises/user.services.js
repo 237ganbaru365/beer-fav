@@ -4,6 +4,7 @@ import {
   collection,
   doc,
   documentId,
+  getDoc,
   query,
   setDoc,
   where,
@@ -22,4 +23,14 @@ export const addUserByAuthId = (userData, authId) => {
 export const getUserByPostId = (postId) => {
   const userPost = getPost(postId);
   return userPost;
+};
+
+export const getUserByUserId = async (userId) => {
+  try {
+    const userDocRef = doc(db, "users", userId);
+    return await getDoc(userDocRef);
+  } catch (error) {
+    // もしここでエラーが発生したら、呼び出し元にエラーを返す
+    throw error;
+  }
 };

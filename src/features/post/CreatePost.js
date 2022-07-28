@@ -18,7 +18,7 @@ export const CreatePost = () => {
   const dispatch = useDispatch();
 
   const { myPostIdList } = useSelector((state) => state.user.user);
-  // console.log("myPostIdList", myPostIdList);
+  console.log("myPostIdList", myPostIdList);
 
   // check authenticated user
   const { uid, displayName } = auth.currentUser;
@@ -54,7 +54,7 @@ export const CreatePost = () => {
       const userDocRef = doc(db, "users", uid);
 
       updateDoc(userDocRef, {
-        myPostList: [...myPostIdList, myPostId],
+        myPostIdList: [...myPostIdList, myPostId],
       })
         .then((res) => console.log(res))
         .catch((err) => console.error(err));
