@@ -16,7 +16,7 @@ export const Post = ({
   imgUrl,
   author,
   postId,
-  onClick,
+  deleteHandler,
 }) => {
   const dispatch = useDispatch();
 
@@ -90,7 +90,7 @@ export const Post = ({
           addFavHandler={addFavHandler}
         />
         <OnlyAuthActions
-          onClick={onClick}
+          deleteHandler={deleteHandler}
           postId={postId}
           author={author}
           authUser={authUser}
