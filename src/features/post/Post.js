@@ -25,6 +25,14 @@ export const Post = ({
   //TODO
   const [isFav, setIsFav] = useState(false);
 
+  // ログインしているユーザーのステートとって
+
+  // そのfavListを取得して
+
+  // propsで渡されるpostIdが、favListにあったら、favIcon はactive
+
+  // else non active
+
   // get auth user
   const authUser = auth.currentUser;
 

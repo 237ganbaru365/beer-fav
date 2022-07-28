@@ -1,33 +1,68 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
 import { getPostByUserId } from "../../app/servises/post.services";
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
+import { useSelector } from "react-redux";
+import {
+  collection,
+  documentId,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
+  // redux stateからuserデータをとってくる
+  const { user } = useSelector((state) => state.user);
 
-  const userId = auth.currentUser.uid;
+  // myPostIdList のデータをとる
+  const myPostIdList = user.myPostIdList;
 
-  const getMine = async () => {
-    try {
-      const data = await getPostByUserId(userId);
-      setMyPosts(
-        data.docs.map((doc) => ({
-          ...doc.data(),
-          myPostId: doc.id,
-        }))
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  console.log("myPostIdList", myPostIdList);
+
+  // getMyPosts ファンクションつくる
+  const getMyPosts = useCallback(async () => {
+    const postColRef = collection(db, "posts");
+
+    // firebaseのクエリをつくる、postのドキュメントの中で、そのdocumentIdがmyPostIdListに含まれているもの
+    const q = query(postColRef, where(documentId(), "in", myPostIdList));
+
+    // getPostsにそのクエリを渡して、myposts を取得
+    const result = await getDocs(q);
+    setMyPosts(
+      result.docs.map((doc) => ({
+        ...doc.data(),
+        myPostId: doc.id,
+      }))
+    );
+  }, [myPostIdList]);
+
+  // getMyPosts を実行
+  // getMyPosts();
+
+  // const userId = auth.currentUser.uid;
+
+  // const getMine = async () => {
+  //   try {
+  //     const data = await getPostByUserId(userId);
+  //     setMyPosts(
+  //       data.docs.map((doc) => ({
+  //         ...doc.data(),
+  //         myPostId: doc.id,
+  //       }))
+  //     );
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   useEffect(() => {
-    getMine();
-  }, []);
+    getMyPosts();
+  }, [getMyPosts]);
 
   let content;
 
