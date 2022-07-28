@@ -25,13 +25,30 @@ export const Header = ({ user }) => {
         {user ? <Link to="/posts">Cheers!</Link> : <Link to="/">Cheers!</Link>}
       </h2>
       <ul className="basis-1/2 text-xl font-semibold flex justify-center">
-        <NavLink to="/posts" className="mr-8">
+        <NavLink
+          to="/posts"
+          className={({ isActive }) =>
+            isActive ? "mr-8 border-b-2 border-dark" : "mr-8"
+          }
+        >
           All
         </NavLink>
-        <NavLink to="/favorite" className="mr-8">
+        <NavLink
+          to="/favorite"
+          className={({ isActive }) =>
+            isActive ? "mr-8 border-b-2 border-dark" : "mr-8"
+          }
+        >
           Favorites
         </NavLink>
-        <NavLink to="/my-posts">MyPosts</NavLink>
+        <NavLink
+          to="/my-posts"
+          className={({ isActive }) =>
+            isActive ? "border-b-2 border-dark" : ""
+          }
+        >
+          MyPosts
+        </NavLink>
       </ul>
       <div className="basis-1/3 flex justify-end">
         {user && (
