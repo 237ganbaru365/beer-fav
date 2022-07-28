@@ -23,15 +23,13 @@ export const MyPosts = () => {
   const getMyPosts = useCallback(async () => {
     const postColRef = collection(db, "posts");
 
-    // firebaseのクエリをつくる、postのドキュメントの中で、そのdocumentIdがmyPostIdListに含まれているもの
     const q = query(postColRef, where(documentId(), "in", myPostIdList));
 
-    // getPostsにそのクエリを渡して、myposts を取得
     const result = await getDocs(q);
     setMyPosts(
       result.docs.map((doc) => ({
         ...doc.data(),
-        myPostId: doc.id,
+        postId: doc.id,
       }))
     );
   }, [myPostIdList]);
@@ -49,8 +47,8 @@ export const MyPosts = () => {
           {myPosts.map((post) => (
             <Post
               {...post}
-              key={post.myPostId}
-              myPostId={post.myPostId}
+              key={post.postId}
+              myPostId={post.postId}
               author={post.username}
             />
           ))}

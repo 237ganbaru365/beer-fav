@@ -1,7 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import { auth } from "../../firebase";
-import { getFavoritePostByUserId } from "../../app/servises/favorite.services";
+import { db } from "../../firebase";
+import { useSelector } from "react-redux";
+import {
+  collection,
+  documentId,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 
 import { Menu } from "../../components/organisms/Menu";
 import { Post } from "./Post";
@@ -9,26 +16,27 @@ import { Post } from "./Post";
 export const FavoritePosts = () => {
   const [favPosts, setFavPosts] = useState([]);
 
-  const userId = auth.currentUser.uid;
+  const { user } = useSelector((state) => state.user);
+  const favPostIdList = user.favPostIdList;
 
-  const getFavorite = async () => {
-    try {
-      const data = await getFavoritePostByUserId(userId);
+  const getFavoritePosts = useCallback(async () => {
+    const postColRef = collection(db, "posts");
 
-      setFavPosts(
-        data.docs.map((doc) => ({
-          ...doc.data(),
-          favId: doc.id,
-        }))
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    const q = query(postColRef, where(documentId(), "in", favPostIdList));
+
+    const result = await getDocs(q);
+
+    setFavPosts(
+      result.docs.map((doc) => ({
+        ...doc.data(),
+        postId: doc.id,
+      }))
+    );
+  }, [favPostIdList]);
 
   useEffect(() => {
-    getFavorite();
-  }, []);
+    getFavoritePosts();
+  }, [getFavoritePosts]);
 
   let content;
 
@@ -39,8 +47,8 @@ export const FavoritePosts = () => {
           {favPosts.map((post) => (
             <Post
               {...post}
-              key={post.favId}
-              favId={post.favId}
+              key={post.postId}
+              favId={post.postId}
               author={post.username}
             />
           ))}
