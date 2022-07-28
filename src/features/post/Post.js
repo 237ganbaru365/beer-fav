@@ -8,7 +8,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { DotLine } from "../../components/atoms/DotLine";
 import { OnlyAuthActions } from "../../components/organisms/OnlyAuthActions";
 import { useDispatch, useSelector } from "react-redux";
-import { addFavPostId } from "../user/userSlice";
+import { addFavPostId, removeFavPostId } from "../user/userSlice";
 
 export const Post = ({
   name,
@@ -22,7 +22,7 @@ export const Post = ({
   favId,
 }) => {
   // FIXME: あとでけす
-  const [isFav, setIsFav] = useState(false);
+  const [isFav, setIsFav] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -58,7 +58,25 @@ export const Post = ({
     );
   };
 
-  const removeFavHandler = async () => {};
+  const removeFavHandler = async () => {
+    // delete user data to firestore
+    const userDocRef = doc(db, "users", authUid);
+
+    const newFavPostIdList = favPostIdList.filter((id) => id !== postId);
+
+    updateDoc(userDocRef, {
+      favPostIdList: newFavPostIdList,
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
+
+    // set postid to user state
+    dispatch(
+      removeFavPostId({
+        postId,
+      })
+    );
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-md">
