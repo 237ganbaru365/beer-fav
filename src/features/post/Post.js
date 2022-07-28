@@ -96,7 +96,7 @@ export const Post = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md">
+    <div className="bg-neutral rounded-lg shadow-md">
       <div>
         <img
           src={imgUrl}

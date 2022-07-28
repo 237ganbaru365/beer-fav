@@ -4,14 +4,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#EBA63F",
-        secondary: "#3CBCC3",
-        neutral: "#F7F4E9",
-        accent: "#438945",
-        danger: "#E40C2B",
+        primary: "#B5FED9",
+        secondary: "#98CBB4",
+        neutral: "#F4F7F3",
+        dark: "#423B0B",
+        darker: "#474935",
       },
       fontFamily: {
-        oleo: ["Oleo Script", "cursive"],
+        nova: ["Ibarra Real Nova", "serif"],
         quicksand: ["Quicksand", "sans-serif"],
       },
     },

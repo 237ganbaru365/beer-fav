@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Oleo+Script:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;0,700;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
@@ -7,13 +7,10 @@
 
 @layer base {
   body {
-    @apply bg-neutral text-gray-600 font-quicksand;
-  }
-  main {
-    @apply h-full;
+    @apply bg-primary text-dark font-quicksand;
   }
   h1 {
-    @apply text-3xl sm:text-4xl font-bold font-oleo tracking-wide;
+    @apply text-3xl sm:text-4xl font-bold font-nova tracking-wide;
   }
   h2 {
     @apply text-xl sm:text-2xl font-medium;
@@ -26,9 +23,6 @@
   }
   h5 {
     @apply text-sm sm:text-base font-normal;
-  }
-  small {
-    @apply text-sm text-gray-600 font-light;
   }
 }
 
@@ -49,7 +43,7 @@
     @apply flex justify-end;
   }
   .WhiteContainer {
-    @apply bg-white shadow-slate-600 shadow-lg rounded-lg p-10 mx-10 sm:mx-20 md:mx-28 lg:mx-40 xl:mx-80 my-20;
+    @apply bg-neutral rounded-xl shadow-2xl p-10 mx-10 sm:mx-20 md:mx-28 lg:mx-40 xl:mx-80 my-20;
   }
   .Hover {
     @apply hover:shadow transform hover:-translate-y-1 duration-300 cursor-pointer;

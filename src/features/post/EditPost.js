@@ -47,7 +47,7 @@ export const EditPost = () => {
 
   return (
     <Card>
-      <h1 className="text-center mb-4 text-primary">Edit a post</h1>
+      <h1 className="text-center mb-4">Edit a post</h1>
       {post ? (
         <PostForm
           preloadValues={post}

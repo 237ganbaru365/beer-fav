@@ -120,16 +120,18 @@ export const Auth = ({ isLoginMode }) => {
   };
 
   return (
-    <Card>
-      <h1 className="text-center mb-4 text-primary">
-        {isLoginMode ? "Log In" : "Sign Up"}
-      </h1>
-      <AuthForm
-        onSubmit={handleSubmit(onSubmit)}
-        register={register}
-        isLoginMode={isLoginMode}
-        errors={errors}
-      />
-    </Card>
+    <section className="h-full FlexCenter">
+      <Card>
+        <h1 className="text-center mb-4">
+          {isLoginMode ? "Log In" : "Sign Up"}
+        </h1>
+        <AuthForm
+          onSubmit={handleSubmit(onSubmit)}
+          register={register}
+          isLoginMode={isLoginMode}
+          errors={errors}
+        />
+      </Card>
+    </section>
   );
 };

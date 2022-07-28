@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { db } from "../../firebase";
 import { useSelector } from "react-redux";
@@ -10,7 +11,8 @@ import {
   where,
 } from "firebase/firestore";
 
-import { Menu } from "../../components/organisms/Menu";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { DotLine } from "../../components/atoms/DotLine";
 import { Post } from "./Post";
 
 export const FavoritePosts = () => {
@@ -42,28 +44,34 @@ export const FavoritePosts = () => {
 
   if (favPosts.length > 0) {
     content = (
-      <section className="p-8">
-        <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {favPosts.map((post) => (
-            <Post
-              {...post}
-              key={post.postId}
-              favId={post.postId}
-              author={post.username}
-              reloadPosts={getFavoritePosts}
-            />
-          ))}
-        </div>
-      </section>
+      <div className="p-12 grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {favPosts.map((post) => (
+          <Post
+            {...post}
+            key={post.postId}
+            favId={post.postId}
+            author={post.username}
+            reloadPosts={getFavoritePosts}
+          />
+        ))}
+      </div>
     );
   } else if (favPosts.length <= 0) {
     content = <h2 className="text-center">No favorite yet...</h2>;
   }
   return (
-    <>
-      <Menu />
-      <h1 className="text-center mb-4 text-primary">Your favorite posts</h1>
-      {content}
-    </>
+    <section className="h-full FlexCenter">
+      <div>
+        <h1 className="text-center mb-4">My Favorite Posts</h1>
+        <p className="text-center FlexCenter mb-4">
+          CREATE YOUR OWN
+          <Link to="/new">
+            <AddCircleIcon />
+          </Link>
+        </p>
+        <DotLine />
+        {content}
+      </div>
+    </section>
   );
 };
