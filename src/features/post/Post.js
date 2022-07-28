@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addFavPostId, removeFavPostId } from "../user/userSlice";
 import { doc, updateDoc } from "firebase/firestore";
@@ -15,10 +15,8 @@ export const Post = ({
   description,
   imgUrl,
   author,
-  onClick,
   postId,
-  userId,
-  favId,
+  onClick,
 }) => {
   const dispatch = useDispatch();
 
