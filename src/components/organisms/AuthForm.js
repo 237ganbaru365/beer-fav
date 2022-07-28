@@ -47,13 +47,10 @@ export const AuthForm = ({ onSubmit, register, errors, isLoginMode }) => {
         helperText={errors?.password?.message}
       />
       <Button
-        className="w-1/2 py-2 mb-4 md:w-2/5"
+        className="w-full py-2 mb-4 md:w-2/5"
         content={isLoginMode ? "LOG IN" : "SIGN UP"}
       />
-      <p
-        onClick={changeModeHandler}
-        className="text-primary font-semibold Hover"
-      >
+      <p onClick={changeModeHandler} className="font-semibold Hover">
         {isLoginMode
           ? " You don't have an acount yet?"
           : "You already have an acount?"}

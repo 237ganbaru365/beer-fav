@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { db } from "../../firebase";
 import { useSelector } from "react-redux";
@@ -10,7 +11,8 @@ import {
   where,
 } from "firebase/firestore";
 
-import { Menu } from "../../components/organisms/Menu";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { DotLine } from "../../components/atoms/DotLine";
 import { Post } from "./Post";
 
 export const MyPosts = () => {
@@ -41,29 +43,35 @@ export const MyPosts = () => {
 
   if (myPosts.length > 0) {
     content = (
-      <section className="p-8">
-        <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {myPosts.map((post) => (
-            <Post
-              {...post}
-              key={post.postId}
-              myPostId={post.postId}
-              author={post.username}
-              reloadPosts={getMyPosts}
-            />
-          ))}
-        </div>
-      </section>
+      <div className="p-8 grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {myPosts.map((post) => (
+          <Post
+            {...post}
+            key={post.postId}
+            myPostId={post.postId}
+            author={post.username}
+            reloadPosts={getMyPosts}
+          />
+        ))}
+      </div>
     );
   } else if (myPosts.length <= 0) {
     content = <h2 className="text-center">No my posts yet...</h2>;
   }
 
   return (
-    <>
-      <Menu />
-      <h1 className="text-center mb-4 text-primary">Your posts</h1>
-      {content}
-    </>
+    <section className="h-full FlexCenter">
+      <div>
+        <h1 className="text-center mb-4">My Posts</h1>
+        <p className="text-center FlexCenter mb-4">
+          CREATE YOUR OWN
+          <Link to="/new">
+            <AddCircleIcon color="white" />
+          </Link>
+        </p>
+        <DotLine />
+        {content}
+      </div>
+    </section>
   );
 };

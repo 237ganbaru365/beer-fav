@@ -24,20 +24,24 @@ export const Header = ({ user }) => {
       <h2 className="basis-1/6 text-2xl font-bold">
         {user ? <Link to="/posts">Cheers!</Link> : <Link to="/">Cheers!</Link>}
       </h2>
-      <ul className="basis-1/2 grid gap-4 text-xl">
-        <NavLink to="/posts">All</NavLink>
-        <NavLink to="/favorite">Favorites</NavLink>
+      <ul className="basis-1/2 text-xl font-semibold flex justify-center">
+        <NavLink to="/posts" className="mr-8">
+          All
+        </NavLink>
+        <NavLink to="/favorite" className="mr-8">
+          Favorites
+        </NavLink>
         <NavLink to="/my-posts">MyPosts</NavLink>
       </ul>
       <div className="basis-1/3 flex justify-end">
         {user && (
-          <>
-            <h4 className="mr-4">
+          <div className="FlexCenter">
+            <h4 className="mr-4 font-quicksand">
               <AccountCircleIcon />
               {user.displayName}
             </h4>
             <Button color="inherit" onClick={logoutHandler} content="LOG OUT" />
-          </>
+          </div>
         )}
         {!user && (
           <>

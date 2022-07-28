@@ -10,13 +10,9 @@ export const FavoriteBtn = ({ postId, addFavHandler, removeFavHandler }) => {
   let content;
 
   if (favPostIdList.includes(postId)) {
-    content = (
-      <FavoriteIcon className="text-primary" onClick={removeFavHandler} />
-    );
+    content = <FavoriteIcon onClick={removeFavHandler} />;
   } else {
-    content = (
-      <FavoriteBorderIcon className="text-primary" onClick={addFavHandler} />
-    );
+    content = <FavoriteBorderIcon onClick={addFavHandler} />;
   }
 
   return <>{content}</>;
