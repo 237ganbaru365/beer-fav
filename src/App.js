@@ -46,7 +46,7 @@ function App() {
   return (
     <BrowserRouter>
       <Header user={user} />
-      <main className="h-[calc(100vh-4rem)]">
+      <main className="h-[calc(100vh-8rem)]">
         <Routes>
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/" element={<Home />} />

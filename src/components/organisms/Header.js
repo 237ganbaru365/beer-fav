@@ -20,7 +20,7 @@ export const Header = ({ user }) => {
   };
 
   return (
-    <header className="h-16 min-w-full flex items-center px-8 fixed top-0 left-0 z-30 backdrop-blur font-nova text-darker">
+    <header className="h-16 min-w-full px-8 flex items-center font-nova text-darker">
       <h2 className="basis-1/6 text-2xl font-bold">
         {user ? <Link to="/posts">Cheers!</Link> : <Link to="/">Cheers!</Link>}
       </h2>

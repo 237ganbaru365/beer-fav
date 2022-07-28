@@ -27,7 +27,7 @@ export const AllPosts = () => {
 
   if (posts.length > 0) {
     content = (
-      <div className="p-8 grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="p-12 grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {posts.map((post) => (
           <Post
             {...post}
@@ -50,7 +50,7 @@ export const AllPosts = () => {
         <p className="text-center FlexCenter mb-4">
           CREATE YOUR OWN
           <Link to="/new">
-            <AddCircleIcon color="white" />
+            <AddCircleIcon />
           </Link>
         </p>
         <DotLine />
