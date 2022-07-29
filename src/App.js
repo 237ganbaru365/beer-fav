@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
+import { getUserByUserId } from "./app/servises/user.services";
 import { PrivateRoutes } from "./util/PrivateRoutes";
 import { PublicRoutes } from "./util/PublicRoute";
+import { login } from "./features/user/userSlice";
 
 import { Header } from "./components/organisms/Header";
 import { Footer } from "./components/organisms/Footer";
+
 import { Home } from "./features/Home/Home";
 import { Auth } from "./features/user/Auth";
-
 import { AllPosts } from "./features/post/AllPosts";
 import { FavoritePosts } from "./features/post/FavoritePosts";
 import { CreatePost } from "./features/post/CreatePost";
@@ -18,43 +21,54 @@ import { EditPost } from "./features/post/EditPost";
 import { MyPosts } from "./features/post/MyPosts";
 
 function App() {
-  // check if user authenticated
-  const [user, setUser] = useState(null);
-  // const uid = auth.currentUser.uid;
+  const dispatch = useDispatch();
 
-  // firebaseの動きをチェックするためのuseEffect
+  //TODO: これ外からimportしてもってこられへんかな？Authページでも使い回してます
+  const initUser = async (authUid) => {
+    try {
+      const userFetchResult = await getUserByUserId(authUid);
+
+      const userData = userFetchResult.data();
+
+      dispatch(
+        login({
+          user: {
+            ...userData,
+            myPostIdList: userData.myPostIdList ? userData.myPostIdList : [],
+            favPostIdList: userData.favPostIdList ? userData.favPostIdList : [],
+          },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //fireauthがログインしているなら、ページ遷移したとしてもuserデータをfirestoreからfetchして、redux stateを更新
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, (authUser) => {
+    const unSubscribe = onAuthStateChanged(auth, async (authUser) => {
       if (authUser) {
-        setUser(authUser);
+        initUser(authUser.uid);
       } else {
-        setUser(null);
+        console.log("user log out!");
       }
       // cleanup function
       return () => unSubscribe();
     });
   }, []);
 
-  //TODO:fireauthがログインしているなら、userデータをfirestoreからfetchして、stateを更新
-  // useEffect(() => {
-  //   // firebase isLogin true
-  //   // const user = await getUserByUserId(uid)
-  //   // const userData = { }
-  //   // disatch(login({ user: userData }))
-  // }, [uid]);
-
   return (
     <BrowserRouter>
-      <Header user={user} />
+      <Header />
       <main className="h-[calc(100vh-8rem)]">
         <Routes>
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/" element={<Home />} />
-          <Route element={<PublicRoutes user={user} />}>
+          <Route element={<PublicRoutes />}>
             <Route path="/login" element={<Auth isLoginMode={true} />} />
             <Route path="/signup" element={<Auth isLoginMode={false} />} />
           </Route>
-          <Route element={<PrivateRoutes user={user} />}>
+          <Route element={<PrivateRoutes />}>
             <Route path="/posts" element={<AllPosts />} />
             <Route path="/my-posts" element={<MyPosts />} />
             <Route path="/favorite" element={<FavoritePosts />} />

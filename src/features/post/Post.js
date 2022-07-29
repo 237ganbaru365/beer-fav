@@ -11,8 +11,8 @@ import { auth, db } from "../../firebase";
 import { deletePost } from "../../app/servises/post.services";
 
 import { DotLine } from "../../components/atoms/DotLine";
-import { OnlyAuthActions } from "../../components/organisms/OnlyAuthActions";
-import { FavoriteBtn } from "../../components/organisms/FavoriteBtn";
+import { OnlyAuthActions } from "../../components/molecules/OnlyAuthActions";
+import { FavoriteBtn } from "../../components/atoms/FavoriteBtn";
 
 export const Post = ({
   name,
