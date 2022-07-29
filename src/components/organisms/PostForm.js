@@ -3,7 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 import { FormInputText } from "../../components/atoms/FormInputText";
-import { FileInput } from "../atoms/FileInput";
+import { FileInput } from "../molecules/FileInput";
 import { Button } from "../../components/atoms/Button";
 
 export const PostForm = ({

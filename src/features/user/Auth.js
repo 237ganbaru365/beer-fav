@@ -45,10 +45,11 @@ export const Auth = ({ isLoginMode }) => {
       // set user state for login
       const authUser = auth.currentUser;
 
-      const initUser = async () => {
+      //TODO: これ、servicesに出して、importして使える？
+      const initUser = async (authUid) => {
         // これは、await 以下で使いたい非同期処理のfunc内でerrorをthrowした場合のみ、trycatchでエラーをキャッチできる
         try {
-          const userFetchResult = await getUserByUserId(authUser.uid);
+          const userFetchResult = await getUserByUserId(authUid);
 
           const userData = userFetchResult.data();
 
@@ -70,7 +71,7 @@ export const Auth = ({ isLoginMode }) => {
         }
       };
 
-      initUser();
+      initUser(authUser.uid);
     } catch (error) {
       console.error(error);
     }
