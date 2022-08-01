@@ -43,12 +43,11 @@ The most important thing to keep in mind was that the code should be easy to rea
 
 ### Authentication
 
-<img width="1439" alt="cheers-home" src="https:/<img width="1439" alt="cheers-auth" src="https://user-images.githubusercontent.com/63833511/182229044-2ab9e8c9-0c7e-4ed1-b82a-aff10f1853af.png">
+<img width="1439" alt="cheers-auth" src="https://user-images.githubusercontent.com/63833511/182229044-2ab9e8c9-0c7e-4ed1-b82a-aff10f1853af.png">
 
 ### Posts
 
 <img width="1439" alt="cheers-posts" src="https://user-images.githubusercontent.com/63833511/182228942-508932ce-0f1a-4d51-835b-872145dccebd.png">
-### Create post
 
 ### Create
 
