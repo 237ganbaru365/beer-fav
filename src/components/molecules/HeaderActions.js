@@ -7,7 +7,7 @@ import { Button } from "../atoms/Button";
 export const HeaderActions = ({ isLogin, logoutHandler, user }) => {
   const navigate = useNavigate();
   return (
-    <div className="basis-1/3 flex justify-end">
+    <div className="hidden basis-1/3 md:flex justify-end">
       {isLogin && (
         <div className="FlexCenter">
           <h4 className="mr-4 font-quicksand">
