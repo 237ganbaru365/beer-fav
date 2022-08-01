@@ -22,12 +22,8 @@ export const addPost = (newPost) => {
 
 // READ
 export const getAllPost = async () => {
-  try {
-    const data = await getDocs(postColRef);
-    return data.docs.map((doc) => ({ ...doc.data(), postId: doc.id }));
-  } catch (error) {
-    console.error(error);
-  }
+  const data = await getDocs(postColRef);
+  return data.docs.map((doc) => ({ ...doc.data(), postId: doc.id }));
 };
 
 export const getPost = (postId) => {
