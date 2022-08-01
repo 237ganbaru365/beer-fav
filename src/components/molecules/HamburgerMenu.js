@@ -58,8 +58,8 @@ export const HamburgerMenu = ({ isLogin, logoutHandler, user }) => {
           <Divider />
           <div className="text-center m-4">
             {isLogin && (
-              <div className="FlexCenter">
-                <h4 className="mr-4 font-quicksand">
+              <div>
+                <h4 className="mr-4 mb-4 font-quicksand">
                   <AccountCircleIcon />
                   {user.username}
                 </h4>

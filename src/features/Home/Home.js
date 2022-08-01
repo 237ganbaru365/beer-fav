@@ -2,15 +2,11 @@ import React from "react";
 
 export const Home = () => {
   return (
-    <>
-      <section className="h-full bg-primary FlexCenter">
-        <div className="text-center">
-          <h1 className="text-9xl text-dark">Cheers!</h1>
-          <span className="text-dark">
-            Remember your precious beer experience.
-          </span>
-        </div>
-      </section>
-    </>
+    <section>
+      <div className="text-center">
+        <h1 className="text-7xl md:text-9xl">Cheers!</h1>
+        <span>Remember your precious beer experience.</span>
+      </div>
+    </section>
   );
 };

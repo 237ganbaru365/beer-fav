@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 import { db } from "../../firebase";
 import { useSelector } from "react-redux";
@@ -11,9 +10,8 @@ import {
   where,
 } from "firebase/firestore";
 
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { DotLine } from "../../components/atoms/DotLine";
 import { Post } from "./Post";
+import { PostHeaderActions } from "../../components/molecules/PostHeaderActions";
 
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
@@ -43,7 +41,7 @@ export const MyPosts = () => {
 
   if (myPosts.length > 0) {
     content = (
-      <div className="p-12 grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="p-8 md:p-12 grid gap-4 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {myPosts.map((post) => (
           <Post
             {...post}
@@ -60,18 +58,10 @@ export const MyPosts = () => {
   }
 
   return (
-    <section className="h-full FlexCenter">
-      <div>
-        <h1 className="text-center mb-4">My Posts</h1>
-        <p className="text-center FlexCenter mb-4">
-          CREATE YOUR OWN
-          <Link to="/new">
-            <AddCircleIcon />
-          </Link>
-        </p>
-        <DotLine />
-        {content}
-      </div>
-    </section>
+    <div className="p-8 my-8">
+      <h1>My Posts</h1>
+      <PostHeaderActions />
+      {content}
+    </div>
   );
 };

@@ -121,11 +121,9 @@ export const Auth = ({ isLoginMode }) => {
   };
 
   return (
-    <section className="h-full FlexCenter">
+    <section>
       <Card>
-        <h1 className="text-center mb-4">
-          {isLoginMode ? "Log In" : "Sign Up"}
-        </h1>
+        <h1>{isLoginMode ? "Log In" : "Sign Up"}</h1>
         <AuthForm
           onSubmit={handleSubmit(onSubmit)}
           register={register}

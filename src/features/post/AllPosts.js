@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 import { getAllPost } from "../../app/servises/post.services";
+import { PostHeaderActions } from "../../components/molecules/PostHeaderActions";
 
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Post } from "./Post";
-import { DotLine } from "../../components/atoms/DotLine";
 
 export const AllPosts = () => {
   const [posts, setPosts] = useState([]);
@@ -27,7 +25,7 @@ export const AllPosts = () => {
 
   if (posts.length > 0) {
     content = (
-      <div className="p-12 grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="p-8 md:p-12 grid gap-4 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {posts.map((post) => (
           <Post
             {...post}
@@ -44,18 +42,10 @@ export const AllPosts = () => {
   }
 
   return (
-    <section className="h-full FlexCenter">
-      <div>
-        <h1 className="text-center mb-4">All Posts</h1>
-        <p className="text-center FlexCenter mb-4">
-          CREATE YOUR OWN
-          <Link to="/new">
-            <AddCircleIcon />
-          </Link>
-        </p>
-        <DotLine />
-        {content}
-      </div>
-    </section>
+    <div className="p-8 my-8">
+      <h1>All Posts</h1>
+      <PostHeaderActions />
+      {content}
+    </div>
   );
 };

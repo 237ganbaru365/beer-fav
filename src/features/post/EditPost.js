@@ -48,17 +48,19 @@ export const EditPost = () => {
   }, [postId]);
 
   return (
-    <Card>
-      <h1 className="text-center mb-4">Edit a post</h1>
-      {post ? (
-        <PostForm
-          preloadValues={post}
-          isAddMode={false}
-          editHandler={editHandler}
-        />
-      ) : (
-        <div>Loading...</div>
-      )}
-    </Card>
+    <section>
+      <Card>
+        <h1>Edit post</h1>
+        {post ? (
+          <PostForm
+            isAddMode={false}
+            preloadValues={post}
+            editHandler={editHandler}
+          />
+        ) : (
+          <div>Loading...</div>
+        )}
+      </Card>
+    </section>
   );
 };

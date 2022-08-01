@@ -9,8 +9,14 @@
   body {
     @apply bg-primary text-dark font-quicksand;
   }
+  section {
+    @apply h-[calc(100vh-8rem)] FlexCenter;
+  }
+  form {
+    @apply FlexColumn;
+  }
   h1 {
-    @apply text-3xl sm:text-4xl font-bold font-nova tracking-wide;
+    @apply text-center mb-4 text-3xl sm:text-4xl font-bold font-nova tracking-wide;
   }
   h2 {
     @apply text-xl sm:text-2xl font-medium;
@@ -21,9 +27,6 @@
   h4 {
     @apply text-base sm:text-lg font-medium;
   }
-  h5 {
-    @apply text-sm sm:text-base font-normal;
-  }
 }
 
 @layer component {
@@ -33,19 +36,8 @@
   .FlexCenter {
     @apply flex items-center justify-center;
   }
-  .FlexAlignCenter {
-    @apply flex items-center;
-  }
-  .FlexJustifyCenter {
-    @apply flex justify-center;
-  }
-  .FlexJustifyEnd {
-    @apply flex justify-end;
-  }
-  .WhiteContainer {
-    @apply bg-neutral rounded-xl shadow-2xl p-10 mx-10 sm:mx-20 md:mx-28 lg:mx-40 xl:mx-80 my-20;
-  }
+  /* FIXME: なぜかこのHoverがきかないので今直書きしているから要修正 */
   .Hover {
-    @apply hover:shadow transform hover:-translate-y-1 duration-300 cursor-pointer;
+    @apply transform ease-in-out duration-300 hover:-translate-y-1;
   }
 }

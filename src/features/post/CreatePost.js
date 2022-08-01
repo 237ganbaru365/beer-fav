@@ -72,9 +72,11 @@ export const CreatePost = () => {
   };
 
   return (
-    <Card>
-      <h1 className="text-center mb-4">Create a new post</h1>
-      <PostForm isAddMode={true} createHandler={createHandler} />
-    </Card>
+    <section>
+      <Card>
+        <h1>Create new post</h1>
+        <PostForm isAddMode={true} createHandler={createHandler} />
+      </Card>
+    </section>
   );
 };
