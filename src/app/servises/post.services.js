@@ -10,7 +10,6 @@ import {
   doc,
   query,
   where,
-  documentId,
 } from "firebase/firestore";
 
 const COLLECTION_NAME = "posts";
@@ -22,8 +21,13 @@ export const addPost = (newPost) => {
 };
 
 // READ
-export const getAllPost = () => {
-  return getDocs(postColRef);
+export const getAllPost = async () => {
+  try {
+    const data = await getDocs(postColRef);
+    return data.docs.map((doc) => ({ ...doc.data(), postId: doc.id }));
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const getPost = (postId) => {

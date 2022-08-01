@@ -9,12 +9,8 @@ export const AllPosts = () => {
   const [posts, setPosts] = useState([]);
 
   const getAll = async () => {
-    try {
-      const data = await getAllPost();
-      setPosts(data.docs.map((doc) => ({ ...doc.data(), postId: doc.id })));
-    } catch (error) {
-      console.error(error);
-    }
+    const postsResult = await getAllPost();
+    setPosts(postsResult);
   };
 
   useEffect(() => {
