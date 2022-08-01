@@ -16,7 +16,7 @@ export const AuthForm = ({ onSubmit, register, errors, isLoginMode }) => {
   };
 
   return (
-    <form onSubmit={onSubmit} className="FlexColumn w-full">
+    <form onSubmit={onSubmit}>
       {!isLoginMode && (
         <FormInputText
           sx={{ marginBottom: "1rem" }}
@@ -47,8 +47,9 @@ export const AuthForm = ({ onSubmit, register, errors, isLoginMode }) => {
         helperText={errors?.password?.message}
       />
       <Button
-        className="w-4/5 py-2 mb-4"
+        className="w-4/5 mb-4"
         content={isLoginMode ? "LOG IN" : "SIGN UP"}
+        type="submit"
       />
       <p onClick={changeModeHandler} className="font-semibold text-center">
         {isLoginMode

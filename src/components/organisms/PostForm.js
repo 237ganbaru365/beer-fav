@@ -27,28 +27,28 @@ export const PostForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="FlexColumn">
+    <form onSubmit={handleSubmit(onSubmit)}>
       <FormInputText
         {...register("name")}
         type="text"
         label="Name"
-        sx={{ marginBottom: "1rem", width: "70%" }}
+        sx={{ marginBottom: "1rem" }}
       />
       <FormInputText
         {...register("store")}
         type="text"
         label="Store"
-        sx={{ marginBottom: "1rem", width: "70%" }}
+        sx={{ marginBottom: "1rem" }}
       />
       <FormInputText
         {...register("description")}
         type="textarea"
         label="Description"
-        sx={{ marginBottom: "2.5rem", width: "70%" }}
+        sx={{ marginBottom: "2.5rem" }}
       />
       <FileInput register={register} />
       <Button
-        className="w-1/2 py-2 mb-4 md:w-2/5"
+        className="w-4/5"
         content={isAddMode ? "CREATE" : "UPDATE"}
         type="submit"
       />

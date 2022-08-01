@@ -29,8 +29,8 @@ export const FileInput = ({ register }) => {
         {imgRef ? (
           <img
             src={imgRef.previewPhoto}
-            alt=""
-            className="object-cover h-12 w- w-full"
+            alt="img"
+            className="object-cover h-12 w-full"
           />
         ) : (
           <InsertPhotoIcon sx={{ opacity: "70%" }} />

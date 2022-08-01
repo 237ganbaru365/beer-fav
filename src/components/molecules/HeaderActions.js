@@ -10,7 +10,7 @@ export const HeaderActions = ({ isLogin, logoutHandler, user }) => {
     <div className="hidden basis-1/3 md:flex justify-end">
       {isLogin && (
         <div className="FlexCenter">
-          <h4 className="mr-4 font-quicksand">
+          <h4 className="mr-4 font-quicksand transform ease-in-out duration-300 hover:-translate-y-1">
             <AccountCircleIcon />
             {user.username}
           </h4>

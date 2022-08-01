@@ -96,14 +96,12 @@ export const Post = ({
   };
 
   return (
-    <div className="bg-neutral rounded-lg shadow-md">
-      <div>
-        <img
-          src={imgUrl}
-          alt="img"
-          className="rounded-t-lg object-cover h-32 w-full opacity-70"
-        />
-      </div>
+    <div className="bg-neutral">
+      <img
+        src={imgUrl}
+        alt="img"
+        className="rounded-t-lg object-cover h-32 w-full opacity-70"
+      />
       <p className="text-right p-2 text-sm">
         created by: <span className="font-bold">{author}</span>
       </p>
