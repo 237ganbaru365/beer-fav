@@ -9,6 +9,8 @@ import { logout } from "../../features/user/userSlice";
 import { Logo } from "../atoms/Logo";
 import { NavBar } from "../molecules/NavBar";
 import { HeaderActions } from "../molecules/HeaderActions";
+import { HamburgerMenu } from "../molecules/HamburgerMenu";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export const Header = () => {
   const dispatch = useDispatch();
@@ -20,10 +22,15 @@ export const Header = () => {
   };
 
   return (
-    <header className="h-16 min-w-full px-8 flex items-center font-nova text-darker">
+    <header className="h-16 min-w-full px-8 flex items-center justify-between font-nova text-darker">
       <Logo isLogin={isLogin} />
       <NavBar />
       <HeaderActions
+        isLogin={isLogin}
+        logoutHandler={logoutHandler}
+        user={user}
+      />
+      <HamburgerMenu
         isLogin={isLogin}
         logoutHandler={logoutHandler}
         user={user}

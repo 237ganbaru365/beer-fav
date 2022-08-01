@@ -19,7 +19,7 @@ export const AuthForm = ({ onSubmit, register, errors, isLoginMode }) => {
     <form onSubmit={onSubmit} className="FlexColumn w-full">
       {!isLoginMode && (
         <FormInputText
-          sx={{ marginBottom: "1rem", width: "70%" }}
+          sx={{ marginBottom: "1rem" }}
           {...register("username")}
           id="username"
           type="text"
@@ -29,7 +29,7 @@ export const AuthForm = ({ onSubmit, register, errors, isLoginMode }) => {
         />
       )}
       <FormInputText
-        sx={{ marginBottom: "1rem", width: "70%" }}
+        sx={{ marginBottom: "1rem" }}
         {...register("email")}
         id="email"
         type="email"
@@ -38,7 +38,7 @@ export const AuthForm = ({ onSubmit, register, errors, isLoginMode }) => {
         helperText={errors?.email?.message}
       />
       <FormInputText
-        sx={{ marginBottom: "2.5rem", width: "70%" }}
+        sx={{ marginBottom: "2.5rem" }}
         {...register("password")}
         id="password"
         type="password"
@@ -47,10 +47,10 @@ export const AuthForm = ({ onSubmit, register, errors, isLoginMode }) => {
         helperText={errors?.password?.message}
       />
       <Button
-        className="w-full py-2 mb-4 md:w-2/5"
+        className="w-4/5 py-2 mb-4"
         content={isLoginMode ? "LOG IN" : "SIGN UP"}
       />
-      <p onClick={changeModeHandler} className="font-semibold Hover">
+      <p onClick={changeModeHandler} className="font-semibold text-center">
         {isLoginMode
           ? " You don't have an acount yet?"
           : "You already have an acount?"}

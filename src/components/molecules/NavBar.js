@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 export const NavBar = () => {
   return (
-    <ul className="basis-1/2 text-xl font-semibold flex justify-center">
+    <ul className="hidden basis-1/2 text-xl font-semibold md:flex justify-center">
       <NavLink
         to="/posts"
         className={({ isActive }) =>
