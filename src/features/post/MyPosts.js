@@ -43,7 +43,6 @@ export const MyPosts = () => {
             key={post.postId}
             myPostId={post.postId}
             author={post.username}
-            reloadPosts={getMyPosts}
           />
         ))}
       </div>

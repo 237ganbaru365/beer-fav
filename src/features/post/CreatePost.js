@@ -9,7 +9,7 @@ import {
   addFileToStorage,
   getFileUrlFromStorage,
 } from "../../app/servises/file.services";
-import { updateUserMyPostIdList } from "../../app/servises/user.services";
+import { addUserMyPostIdList } from "../../app/servises/user.services";
 import { addMyPostId } from "../user/userSlice";
 
 import { Card } from "../../components/atoms/Card";
@@ -55,7 +55,7 @@ export const CreatePost = () => {
 
       // store user data to firestore
       const myPostId = postData.id;
-      await updateUserMyPostIdList(uid, myPostIdList, myPostId);
+      await addUserMyPostIdList(uid, myPostIdList, myPostId);
 
       // set postid to user state
       dispatch(

@@ -27,14 +27,46 @@ export const getUserByUserId = async (userId) => {
 };
 
 // UPDATE
-export const updateUserMyPostIdList = async (
+export const addUserMyPostIdList = async (userId, myPostIdList, myPostId) => {
+  const userDocRef = doc(db, COLLECTION_NAME, userId);
+
+  return await updateDoc(userDocRef, {
+    myPostIdList: [...myPostIdList, myPostId],
+  });
+};
+
+export const addUserFavPostIdList = async (userId, favPostIdList, myPostId) => {
+  const userDocRef = doc(db, COLLECTION_NAME, userId);
+
+  return await updateDoc(userDocRef, {
+    favPostIdList: [...favPostIdList, myPostId],
+  });
+};
+
+export const removeUserMyPostIdList = async (
   userId,
   myPostIdList,
   myPostId
 ) => {
   const userDocRef = doc(db, COLLECTION_NAME, userId);
 
+  const newMyPostIdList = myPostIdList.filter((id) => id !== myPostId);
+
   return await updateDoc(userDocRef, {
-    myPostIdList: [...myPostIdList, myPostId],
+    myPostIdList: newMyPostIdList,
+  });
+};
+
+export const removeUserFavPostIdList = async (
+  userId,
+  favPostIdList,
+  myPostId
+) => {
+  const userDocRef = doc(db, COLLECTION_NAME, userId);
+
+  const newFavPostIdList = favPostIdList.filter((id) => id !== myPostId);
+
+  return await updateDoc(userDocRef, {
+    favPostIdList: newFavPostIdList,
   });
 };

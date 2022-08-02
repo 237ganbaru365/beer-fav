@@ -42,7 +42,6 @@ export const FavoritePosts = () => {
             key={post.postId}
             favId={post.postId}
             author={post.username}
-            reloadPosts={getFavoritePosts}
           />
         ))}
       </div>
