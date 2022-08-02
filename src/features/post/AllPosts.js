@@ -1,43 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
 
+import { REACT_QUERY_KEY_POSTS } from "../../constants/constants";
 import { getAllPost } from "../../app/servises/post.services";
 import { PostHeaderActions } from "../../components/molecules/PostHeaderActions";
 
 import { Post } from "./Post";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const AllPosts = () => {
-  const [posts, setPosts] = useState([]);
-
-  const getAll = async () => {
-    try {
-      const data = await getAllPost();
-      setPosts(data.docs.map((doc) => ({ ...doc.data(), postId: doc.id })));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getAll();
-  }, []);
+  const getAllPostQuery = useQuery([REACT_QUERY_KEY_POSTS], getAllPost);
 
   let content;
 
-  if (posts.length > 0) {
+  if (getAllPostQuery.isLoading) {
+    content = <CircularProgress color="inherit" />;
+  } else if (getAllPostQuery.data.length > 0) {
     content = (
       <div className="p-8 md:p-12 grid gap-4 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {posts.map((post) => (
+        {getAllPostQuery.data.map((post) => (
           <Post
             {...post}
             key={post.postId}
             postId={post.postId}
             author={post.username}
-            reloadPosts={getAll}
           />
         ))}
       </div>
     );
-  } else if (posts.length <= 0) {
+  } else if (getAllPostQuery.data.length <= 0) {
     content = <h2 className="text-center">No posts yet...</h2>;
   }
 

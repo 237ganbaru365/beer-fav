@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { FormInputText } from "../atoms/FormInputText";
 import { Button } from "../atoms/Button";
 
-export const AuthForm = ({ onSubmit, register, errors, isLoginMode }) => {
+export const AuthForm = ({
+  onSubmit,
+  register,
+  errors,
+  isLoginMode,
+  isLoading,
+}) => {
   const navigate = useNavigate();
 
   const changeModeHandler = () => {
@@ -50,6 +56,7 @@ export const AuthForm = ({ onSubmit, register, errors, isLoginMode }) => {
         className="w-4/5 mb-4"
         content={isLoginMode ? "LOG IN" : "SIGN UP"}
         type="submit"
+        disabled={isLoading}
       />
       <p onClick={changeModeHandler} className="font-semibold text-center">
         {isLoginMode

@@ -1,37 +1,28 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { db } from "../../firebase";
 import { useSelector } from "react-redux";
-import {
-  collection,
-  documentId,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+
+import { getFavoritePostsByFavList } from "../../app/servises/post.services";
 
 import { Post } from "./Post";
 import { PostHeaderActions } from "../../components/molecules/PostHeaderActions";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const FavoritePosts = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [favPosts, setFavPosts] = useState([]);
 
-  const { user } = useSelector((state) => state.user);
-  const favPostIdList = user.favPostIdList;
+  const { favPostIdList } = useSelector((state) => state.user.user);
 
   const getFavoritePosts = useCallback(async () => {
-    const postColRef = collection(db, "posts");
-
-    const q = query(postColRef, where(documentId(), "in", favPostIdList));
-
-    const result = await getDocs(q);
-
-    setFavPosts(
-      result.docs.map((doc) => ({
-        ...doc.data(),
-        postId: doc.id,
-      }))
-    );
+    setIsLoading(true);
+    try {
+      const favPostsData = await getFavoritePostsByFavList(favPostIdList);
+      setFavPosts(favPostsData);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
   }, [favPostIdList]);
 
   useEffect(() => {
@@ -40,7 +31,9 @@ export const FavoritePosts = () => {
 
   let content;
 
-  if (favPosts.length > 0) {
+  if (isLoading) {
+    content = <CircularProgress color="inherit" />;
+  } else if (favPosts.length > 0) {
     content = (
       <div className="p-8 md:p-12 grid gap-4 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {favPosts.map((post) => (
@@ -49,7 +42,6 @@ export const FavoritePosts = () => {
             key={post.postId}
             favId={post.postId}
             author={post.username}
-            reloadPosts={getFavoritePosts}
           />
         ))}
       </div>

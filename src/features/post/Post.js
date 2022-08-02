@@ -1,102 +1,103 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { doc, updateDoc } from "firebase/firestore";
 
 import {
   addFavPostId,
   removeFavPostId,
   removeMyPostId,
 } from "../user/userSlice";
-import { auth, db } from "../../firebase";
+import {
+  addUserFavPostIdList,
+  removeUserFavPostIdList,
+  removeUserMyPostIdList,
+} from "../../app/servises/user.services";
 import { deletePost } from "../../app/servises/post.services";
+import { auth } from "../../firebase";
 
 import { DotLine } from "../../components/atoms/DotLine";
 import { OnlyAuthActions } from "../../components/molecules/OnlyAuthActions";
 import { FavoriteBtn } from "../../components/atoms/FavoriteBtn";
+import CircularProgress from "@mui/material/CircularProgress";
 
-export const Post = ({
-  name,
-  store,
-  description,
-  imgUrl,
-  author,
-  postId,
-  reloadPosts,
-}) => {
+export const Post = ({ name, store, description, imgUrl, author, postId }) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { favPostIdList, myPostIdList } = useSelector(
     (state) => state.user.user
   );
 
-  // get auth user
+  // check current authenticated user
   const authUser = auth.currentUser;
   const authUid = authUser.uid;
 
-  const deleteHandler = async (postId) => {
-    // delete the post from post db
-    await deletePost(postId);
+  const deleteHandler = async () => {
+    setIsLoading(true);
 
-    // delete the post from user db
-    const userDocRef = doc(db, "users", authUid);
+    try {
+      // delete the post from post db
+      await deletePost(postId);
 
-    const newMyPostIdList = myPostIdList.filter((id) => id !== postId);
+      // delete the post from user db
+      await removeUserMyPostIdList(authUid, myPostIdList, postId);
 
-    await updateDoc(userDocRef, {
-      myPostIdList: newMyPostIdList,
-    });
+      // TODO: also remove the post from someone's favoriteList
 
-    // delete the post from user redux state
-    dispatch(
-      removeMyPostId({
-        postId,
-      })
-    );
+      // delete the post from user redux state
+      dispatch(
+        removeMyPostId({
+          postId,
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
 
-    // update page
-    reloadPosts();
+    // TODO: realtime fetch db
   };
 
   const addFavHandler = async () => {
-    // store user data to firestore
-    const userDocRef = doc(db, "users", authUid);
+    setIsLoading(true);
+    try {
+      // store user data to firestore
+      await addUserFavPostIdList(authUid, favPostIdList, postId);
 
-    updateDoc(userDocRef, {
-      favPostIdList: [...favPostIdList, postId],
-    })
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
-
-    // set postid to user state
-    dispatch(
-      addFavPostId({
-        postId,
-      })
-    );
+      // set postid to user state
+      dispatch(
+        addFavPostId({
+          postId,
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
+    // TODO: realtime fetch db
   };
 
   const removeFavHandler = async () => {
-    // delete user data to firestore
-    const userDocRef = doc(db, "users", authUid);
+    setIsLoading(true);
+    try {
+      // delete user data to firestore
+      await removeUserFavPostIdList(authUid, favPostIdList, postId);
 
-    const newFavPostIdList = favPostIdList.filter((id) => id !== postId);
+      // set postid to user state
+      dispatch(
+        removeFavPostId({
+          postId,
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
 
-    updateDoc(userDocRef, {
-      favPostIdList: newFavPostIdList,
-    })
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
-
-    // set postid to user state
-    dispatch(
-      removeFavPostId({
-        postId,
-      })
-    );
+    // TODO: realtime fetch db
   };
 
   return (
-    <div className="bg-neutral">
+    <div className="bg-neutral rounded-xl shadow-md">
       <img
         src={imgUrl}
         alt="img"
@@ -112,18 +113,21 @@ export const Post = ({
         <p>{description}</p>
         <DotLine />
       </div>
-      <div className="p-2 text-right">
-        <FavoriteBtn
-          postId={postId}
-          removeFavHandler={removeFavHandler}
-          addFavHandler={addFavHandler}
-        />
-        <OnlyAuthActions
-          deleteHandler={() => deleteHandler(postId)}
-          postId={postId}
-          author={author}
-          authUser={authUser}
-        />
+      <div className="p-2 text-right flex">
+        {isLoading && <CircularProgress color="inherit" size={20} />}
+        <p className="flex basis-full justify-end">
+          <FavoriteBtn
+            postId={postId}
+            removeFavHandler={removeFavHandler}
+            addFavHandler={addFavHandler}
+          />
+          <OnlyAuthActions
+            deleteHandler={deleteHandler}
+            postId={postId}
+            author={author}
+            authUser={authUser}
+          />
+        </p>
       </div>
     </div>
   );

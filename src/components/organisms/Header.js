@@ -1,8 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { auth } from "../../firebase";
-import { signOut } from "firebase/auth";
+import { fireAuthSignOut } from "../../app/servises/auth.services";
 import { logout } from "../../features/user/userSlice";
 
 import { Logo } from "../atoms/Logo";
@@ -12,10 +11,11 @@ import { HamburgerMenu } from "../molecules/HamburgerMenu";
 
 export const Header = () => {
   const dispatch = useDispatch();
+
   const { user, isLogin } = useSelector((state) => state.user);
 
-  const logoutHandler = () => {
-    signOut(auth);
+  const logoutHandler = async () => {
+    await fireAuthSignOut();
     dispatch(logout());
   };
 

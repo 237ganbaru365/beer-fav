@@ -1,36 +1,29 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { db } from "../../firebase";
 import { useSelector } from "react-redux";
-import {
-  collection,
-  documentId,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+
+import { getMyPostsByMyPostList } from "../../app/servises/post.services";
 
 import { Post } from "./Post";
 import { PostHeaderActions } from "../../components/molecules/PostHeaderActions";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { user } = useSelector((state) => state.user);
-  const myPostIdList = user.myPostIdList;
+  const { myPostIdList } = useSelector((state) => state.user.user);
 
   const getMyPosts = useCallback(async () => {
-    const postColRef = collection(db, "posts");
+    setIsLoading(true);
+    try {
+      const myPostsData = await getMyPostsByMyPostList(myPostIdList);
 
-    const q = query(postColRef, where(documentId(), "in", myPostIdList));
-
-    const result = await getDocs(q);
-    setMyPosts(
-      result.docs.map((doc) => ({
-        ...doc.data(),
-        postId: doc.id,
-      }))
-    );
+      setMyPosts(myPostsData);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
   }, [myPostIdList]);
 
   useEffect(() => {
@@ -39,7 +32,9 @@ export const MyPosts = () => {
 
   let content;
 
-  if (myPosts.length > 0) {
+  if (isLoading) {
+    content = <CircularProgress color="inherit" />;
+  } else if (myPosts.length > 0) {
     content = (
       <div className="p-8 md:p-12 grid gap-4 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {myPosts.map((post) => (
@@ -48,7 +43,6 @@ export const MyPosts = () => {
             key={post.postId}
             myPostId={post.postId}
             author={post.username}
-            reloadPosts={getMyPosts}
           />
         ))}
       </div>

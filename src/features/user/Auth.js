@@ -1,27 +1,21 @@
-import React from "react";
-
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
 
 import { LoginSchema, SignupSchema } from "../../util/validators";
-import {
-  addUserByAuthId,
-  getUserByUserId,
-} from "../../app/servises/user.services";
+import { addUserByUserId } from "../../app/servises/user.services";
 import { auth } from "../../firebase";
-import { login, signup } from "./userSlice";
+import {
+  fireAuthSignIn,
+  fireAuthSignUp,
+  fireAuthUpdate,
+} from "../../app/servises/auth.services";
 
 import { Card } from "../../components/atoms/Card";
 import { AuthForm } from "../../components/organisms/AuthForm";
 
 export const Auth = ({ isLoginMode }) => {
-  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   // setup for RHF
   const initialHookForm = {
@@ -37,77 +31,38 @@ export const Auth = ({ isLoginMode }) => {
 
   // login handler
   const loginHandler = async (email, password) => {
+    setIsLoading(true);
     try {
-      // authenticated
-      await signInWithEmailAndPassword(auth, email, password);
-      console.log("Login successfully!");
-
-      // set user state for login
-      const authUser = auth.currentUser;
-
-      //TODO: これ、servicesに出して、importして使える？
-      const initUser = async (authUid) => {
-        // これは、await 以下で使いたい非同期処理のfunc内でerrorをthrowした場合のみ、trycatchでエラーをキャッチできる
-        try {
-          const userFetchResult = await getUserByUserId(authUid);
-
-          const userData = userFetchResult.data();
-
-          dispatch(
-            login({
-              user: {
-                ...userData,
-                myPostIdList: userData.myPostIdList
-                  ? userData.myPostIdList
-                  : [],
-                favPostIdList: userData.favPostIdList
-                  ? userData.favPostIdList
-                  : [],
-              },
-            })
-          );
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      initUser(authUser.uid);
+      await fireAuthSignIn(email, password);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
+    setIsLoading(false);
   };
 
   // signup handler
-  const signUpHandler = async (username, email, password) => {
+  const signUpHandler = async (email, password, username) => {
+    setIsLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(auth.currentUser, { displayName: username });
+      await fireAuthSignUp(email, password);
 
-      console.log("Create user successfully!");
+      // check authenticated user info
+      const user = auth.currentUser;
+      const { uid, displayName } = user;
+
+      // update displayName to user input name
+      await fireAuthUpdate(user, username);
 
       // store user data to firestore
-      const userId = auth.currentUser.uid;
-      const { displayName } = auth.currentUser;
-
       const userData = {
         username: displayName,
         email,
       };
-      await addUserByAuthId(userData, userId);
-      console.log("Store user data successfully!");
-
-      // set user state for signup
-      dispatch(
-        signup({
-          user: {
-            username: displayName,
-            userId,
-          },
-        })
-      );
+      await addUserByUserId(userData, uid);
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
   };
 
   // processing for submit
@@ -129,6 +84,7 @@ export const Auth = ({ isLoginMode }) => {
           register={register}
           isLoginMode={isLoginMode}
           errors={errors}
+          isLoading={isLoading}
         />
       </Card>
     </section>

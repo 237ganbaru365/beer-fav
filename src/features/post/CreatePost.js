@@ -1,39 +1,48 @@
-import React from "react";
-
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 
-import { auth, db, storage } from "../../firebase";
+import { auth } from "../../firebase";
 import { addPost } from "../../app/servises/post.services";
+import {
+  addFileToStorage,
+  getFileUrlFromStorage,
+} from "../../app/servises/file.services";
+import { addUserMyPostIdList } from "../../app/servises/user.services";
+import { addMyPostId } from "../user/userSlice";
 
 import { Card } from "../../components/atoms/Card";
 import { PostForm } from "../../components/organisms/PostForm";
-import { useDispatch, useSelector } from "react-redux";
-import { addMyPostId } from "../user/userSlice";
-import { doc, updateDoc } from "firebase/firestore";
 
 export const CreatePost = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [isLoading, setIsLoading] = useState();
+
+  // get current myPostIdList from redux state
   const { myPostIdList } = useSelector((state) => state.user.user);
 
   // check authenticated user
   const { uid, displayName } = auth.currentUser;
 
-  // processing on submit
+  // create function
   const createHandler = async (data) => {
+    setIsLoading(true);
+
     const { name, store, description } = data;
 
     // create file reference
-    const uploadFile = data.file[0];
-    const imgRef = ref(storage, `images/${uploadFile.name + v4()}`);
+    const fileData = data.file[0];
+    const fileName = fileData.name + v4();
 
     try {
-      // upload file to firebase storage
-      await uploadBytes(imgRef, uploadFile);
-      const imgUrl = await getDownloadURL(imgRef);
+      // upload file to fire storage
+      await addFileToStorage(fileData, fileName);
+      const imgUrl = await getFileUrlFromStorage(fileName);
+
+      // store post data to firestore
       const newPost = {
         name,
         store,
@@ -42,21 +51,11 @@ export const CreatePost = () => {
         userId: uid,
         username: displayName,
       };
-
-      // store post data to firestore
       const postData = await addPost(newPost);
-      console.log("created post successfully!", postData);
-
-      const myPostId = postData.id;
 
       // store user data to firestore
-      const userDocRef = doc(db, "users", uid);
-
-      updateDoc(userDocRef, {
-        myPostIdList: [...myPostIdList, myPostId],
-      })
-        .then((res) => console.log(res))
-        .catch((err) => console.error(err));
+      const myPostId = postData.id;
+      await addUserMyPostIdList(uid, myPostIdList, myPostId);
 
       // set postid to user state
       dispatch(
@@ -69,13 +68,18 @@ export const CreatePost = () => {
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
   };
 
   return (
     <section>
       <Card>
         <h1>Create new post</h1>
-        <PostForm isAddMode={true} createHandler={createHandler} />
+        <PostForm
+          isAddMode={true}
+          createHandler={createHandler}
+          isLoading={isLoading}
+        />
       </Card>
     </section>
   );
