@@ -6,7 +6,7 @@ import { getFavoritePostsByFavList } from "../../app/servises/post.services";
 
 import { Post } from "./Post";
 import { PostHeaderActions } from "../../components/molecules/PostHeaderActions";
-import LinearProgress from "@mui/material/LinearProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const FavoritePosts = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +18,6 @@ export const FavoritePosts = () => {
     setIsLoading(true);
     try {
       const favPostsData = await getFavoritePostsByFavList(favPostIdList);
-
       setFavPosts(favPostsData);
     } catch (error) {
       console.error(error);
@@ -30,13 +29,11 @@ export const FavoritePosts = () => {
     getFavoritePosts();
   }, [getFavoritePosts]);
 
-  if (isLoading) {
-    return <LinearProgress color="inherit" />;
-  }
-
   let content;
 
-  if (favPosts.length > 0) {
+  if (isLoading) {
+    content = <CircularProgress color="inherit" />;
+  } else if (favPosts.length > 0) {
     content = (
       <div className="p-8 md:p-12 grid gap-4 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {favPosts.map((post) => (

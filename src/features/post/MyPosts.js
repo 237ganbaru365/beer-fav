@@ -6,7 +6,7 @@ import { getMyPostsByMyPostList } from "../../app/servises/post.services";
 
 import { Post } from "./Post";
 import { PostHeaderActions } from "../../components/molecules/PostHeaderActions";
-import LinearProgress from "@mui/material/LinearProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
@@ -30,13 +30,11 @@ export const MyPosts = () => {
     getMyPosts();
   }, [getMyPosts]);
 
-  if (isLoading) {
-    return <LinearProgress color="inherit" />;
-  }
-
   let content;
 
-  if (myPosts.length > 0) {
+  if (isLoading) {
+    content = <CircularProgress color="inherit" />;
+  } else if (myPosts.length > 0) {
     content = (
       <div className="p-8 md:p-12 grid gap-4 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {myPosts.map((post) => (

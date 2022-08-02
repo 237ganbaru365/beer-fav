@@ -11,6 +11,7 @@ export const PostForm = ({
   isAddMode,
   createHandler,
   editHandler,
+  isLoading,
 }) => {
   // set for RHF
   const { register, handleSubmit } = useForm({
@@ -51,6 +52,7 @@ export const PostForm = ({
         className="w-4/5"
         content={isAddMode ? "CREATE" : "UPDATE"}
         type="submit"
+        disabled={isLoading}
       />
     </form>
   );

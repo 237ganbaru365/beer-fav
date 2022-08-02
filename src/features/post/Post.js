@@ -53,8 +53,8 @@ export const Post = ({
       })
     );
 
-    // update page
-    reloadPosts();
+    // // update page
+    // reloadPosts();
   };
 
   const addFavHandler = async () => {

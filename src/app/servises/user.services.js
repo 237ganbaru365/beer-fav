@@ -1,6 +1,6 @@
 import { db } from "../../firebase";
 
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 const COLLECTION_NAME = "users";
 
@@ -24,4 +24,17 @@ export const getUserByUserId = async (userId) => {
   } catch (error) {
     throw error;
   }
+};
+
+// UPDATE
+export const updateUserMyPostIdList = async (
+  userId,
+  myPostIdList,
+  myPostId
+) => {
+  const userDocRef = doc(db, COLLECTION_NAME, userId);
+
+  return await updateDoc(userDocRef, {
+    myPostIdList: [...myPostIdList, myPostId],
+  });
 };
