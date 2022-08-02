@@ -38,6 +38,7 @@ export const CreatePost = () => {
     const fileName = fileData.name + v4();
 
     try {
+      // upload file to fire storage
       await addFileToStorage(fileData, fileName);
       const imgUrl = await getFileUrlFromStorage(fileName);
 
