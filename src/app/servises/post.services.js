@@ -10,6 +10,7 @@ import {
   doc,
   query,
   where,
+  documentId,
 } from "firebase/firestore";
 
 const COLLECTION_NAME = "posts";
@@ -20,30 +21,57 @@ export const addPost = (newPost) => {
   return addDoc(postColRef, newPost);
 };
 
+// READ
 export const getAllPost = async () => {
   const data = await getDocs(postColRef);
   return data.docs.map((doc) => ({ ...doc.data(), postId: doc.id }));
 };
 
-export const getPost = (postId) => {
+export const getPost = async (postId) => {
   const postDocRef = doc(db, COLLECTION_NAME, postId);
-  return getDoc(postDocRef);
+  return await getDoc(postDocRef);
 };
 
-export const getPostByUserId = (userId) => {
-  const q = query(postColRef, where("userId", "==", userId));
+export const getFavoritePostsByFavList = async (favPostIdList) => {
+  try {
+    //FIXME: favPostListが空のarrayの時、エラーでる
+    const q = query(postColRef, where(documentId(), "in", favPostIdList));
 
-  return getDocs(q);
+    const result = await getDocs(q);
+
+    return result.docs.map((doc) => ({
+      ...doc.data(),
+      postId: doc.id,
+    }));
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getMyPostsByMyPostList = async (myPostIdList) => {
+  try {
+    //FIXME: myPostListが空のarrayの時、エラーでる
+    const q = query(postColRef, where(documentId(), "in", myPostIdList));
+
+    const result = await getDocs(q);
+
+    return result.docs.map((doc) => ({
+      ...doc.data(),
+      postId: doc.id,
+    }));
+  } catch (error) {
+    throw error;
+  }
 };
 
 // UPDATE
-export const updatePost = (id, updatedPost) => {
-  const postDocRef = doc(db, COLLECTION_NAME, id);
-  return updateDoc(postDocRef, updatedPost);
+export const updatePost = async (postId, updatedPost) => {
+  const postDocRef = doc(db, COLLECTION_NAME, postId);
+  return await updateDoc(postDocRef, updatedPost);
 };
 
 // DELETE
-export const deletePost = (postId) => {
+export const deletePost = async (postId) => {
   const postDocRef = doc(db, COLLECTION_NAME, postId);
-  return deleteDoc(postDocRef);
+  return await deleteDoc(postDocRef);
 };

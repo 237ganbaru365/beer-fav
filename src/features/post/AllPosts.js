@@ -6,15 +6,16 @@ import { getAllPost } from "../../app/servises/post.services";
 import { PostHeaderActions } from "../../components/molecules/PostHeaderActions";
 
 import { Post } from "./Post";
+import LinearProgress from "@mui/material/LinearProgress";
 
 export const AllPosts = () => {
   const getAllPostQuery = useQuery([REACT_QUERY_KEY_POSTS], getAllPost);
 
-  if (getAllPostQuery.isLoading) {
-    return <div>Loading...</div>;
-  }
-
   let content;
+
+  if (getAllPostQuery.isLoading) {
+    return <LinearProgress color="inherit" />;
+  }
 
   if (getAllPostQuery.data.length > 0) {
     content = (

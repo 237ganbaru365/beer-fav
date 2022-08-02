@@ -11,7 +11,6 @@ import { login } from "./features/user/userSlice";
 
 import { Header } from "./components/organisms/Header";
 import { Footer } from "./components/organisms/Footer";
-
 import { Home } from "./features/Home/Home";
 import { Auth } from "./features/user/Auth";
 import { AllPosts } from "./features/post/AllPosts";

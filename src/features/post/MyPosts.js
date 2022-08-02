@@ -1,44 +1,29 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { db } from "../../firebase";
 import { useSelector } from "react-redux";
-import {
-  collection,
-  documentId,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+
+import { getMyPostsByMyPostList } from "../../app/servises/post.services";
 
 import { Post } from "./Post";
 import { PostHeaderActions } from "../../components/molecules/PostHeaderActions";
+import LinearProgress from "@mui/material/LinearProgress";
 
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { user } = useSelector((state) => state.user);
-  const myPostIdList = user.myPostIdList;
+  const { myPostIdList } = useSelector((state) => state.user.user);
 
   const getMyPosts = useCallback(async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const postColRef = collection(db, "posts");
+      const myPostsData = await getMyPostsByMyPostList(myPostIdList);
 
-      const q = query(postColRef, where(documentId(), "in", myPostIdList));
-
-      const result = await getDocs(q);
-      setMyPosts(
-        result.docs.map((doc) => ({
-          ...doc.data(),
-          postId: doc.id,
-        }))
-      );
-      setIsLoading(false);
+      setMyPosts(myPostsData);
     } catch (error) {
-      setIsLoading(false);
       console.error(error);
     }
+    setIsLoading(false);
   }, [myPostIdList]);
 
   useEffect(() => {
@@ -46,7 +31,7 @@ export const MyPosts = () => {
   }, [getMyPosts]);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LinearProgress color="inherit" />;
   }
 
   let content;

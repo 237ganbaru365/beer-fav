@@ -1,42 +1,38 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { db } from "../../firebase";
 import { useSelector } from "react-redux";
-import {
-  collection,
-  documentId,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+
+import { getFavoritePostsByFavList } from "../../app/servises/post.services";
 
 import { Post } from "./Post";
 import { PostHeaderActions } from "../../components/molecules/PostHeaderActions";
+import LinearProgress from "@mui/material/LinearProgress";
 
 export const FavoritePosts = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [favPosts, setFavPosts] = useState([]);
 
-  const { user } = useSelector((state) => state.user);
-  const favPostIdList = user.favPostIdList;
+  const { favPostIdList } = useSelector((state) => state.user.user);
 
   const getFavoritePosts = useCallback(async () => {
-    const postColRef = collection(db, "posts");
+    setIsLoading(true);
+    try {
+      const favPostsData = await getFavoritePostsByFavList(favPostIdList);
 
-    const q = query(postColRef, where(documentId(), "in", favPostIdList));
-
-    const result = await getDocs(q);
-
-    setFavPosts(
-      result.docs.map((doc) => ({
-        ...doc.data(),
-        postId: doc.id,
-      }))
-    );
+      setFavPosts(favPostsData);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
   }, [favPostIdList]);
 
   useEffect(() => {
     getFavoritePosts();
   }, [getFavoritePosts]);
+
+  if (isLoading) {
+    return <LinearProgress color="inherit" />;
+  }
 
   let content;
 
