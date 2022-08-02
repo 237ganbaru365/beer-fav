@@ -41,37 +41,6 @@ export const Auth = ({ isLoginMode }) => {
       // authenticated
       await signInWithEmailAndPassword(auth, email, password);
       console.log("Login successfully!");
-
-      // set user state for login
-      const authUser = auth.currentUser;
-
-      //TODO: これ、servicesに出して、importして使える？
-      const initUser = async (authUid) => {
-        // これは、await 以下で使いたい非同期処理のfunc内でerrorをthrowした場合のみ、trycatchでエラーをキャッチできる
-        try {
-          const userFetchResult = await getUserByUserId(authUid);
-
-          const userData = userFetchResult.data();
-
-          dispatch(
-            login({
-              user: {
-                ...userData,
-                myPostIdList: userData.myPostIdList
-                  ? userData.myPostIdList
-                  : [],
-                favPostIdList: userData.favPostIdList
-                  ? userData.favPostIdList
-                  : [],
-              },
-            })
-          );
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      initUser(authUser.uid);
     } catch (error) {
       console.error(error);
     }

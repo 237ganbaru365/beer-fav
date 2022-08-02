@@ -20,7 +20,6 @@ export const addPost = (newPost) => {
   return addDoc(postColRef, newPost);
 };
 
-// READ
 export const getAllPost = async () => {
   const data = await getDocs(postColRef);
   return data.docs.map((doc) => ({ ...doc.data(), postId: doc.id }));

@@ -15,27 +15,39 @@ import { PostHeaderActions } from "../../components/molecules/PostHeaderActions"
 
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useSelector((state) => state.user);
   const myPostIdList = user.myPostIdList;
 
   const getMyPosts = useCallback(async () => {
-    const postColRef = collection(db, "posts");
+    try {
+      setIsLoading(true);
+      const postColRef = collection(db, "posts");
 
-    const q = query(postColRef, where(documentId(), "in", myPostIdList));
+      const q = query(postColRef, where(documentId(), "in", myPostIdList));
 
-    const result = await getDocs(q);
-    setMyPosts(
-      result.docs.map((doc) => ({
-        ...doc.data(),
-        postId: doc.id,
-      }))
-    );
+      const result = await getDocs(q);
+      setMyPosts(
+        result.docs.map((doc) => ({
+          ...doc.data(),
+          postId: doc.id,
+        }))
+      );
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error(error);
+    }
   }, [myPostIdList]);
 
   useEffect(() => {
     getMyPosts();
   }, [getMyPosts]);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   let content;
 
