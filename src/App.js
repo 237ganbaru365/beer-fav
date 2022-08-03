@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -22,31 +22,26 @@ import { MyPosts } from "./features/post/MyPosts";
 function App() {
   const dispatch = useDispatch();
 
-  //TODO: これ外からimportしてもってこられへんかな？Authページでも使い回してます
-  const initUser = useCallback(
-    async (authUid) => {
-      try {
-        const userFetchResult = await getUserByUserId(authUid);
+  //FIXME: これ、Authでもしないと、ログインもしくはサインアップした時にreduxにdispatchされへんからページ遷移しない
+  const initUser = async (authUid) => {
+    try {
+      const userFetchResult = await getUserByUserId(authUid);
 
-        const userData = userFetchResult.data();
+      const userData = userFetchResult.data();
 
-        dispatch(
-          login({
-            user: {
-              ...userData,
-              myPostIdList: userData.myPostIdList ? userData.myPostIdList : [],
-              favPostIdList: userData.favPostIdList
-                ? userData.favPostIdList
-                : [],
-            },
-          })
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    [dispatch]
-  );
+      dispatch(
+        login({
+          user: {
+            ...userData,
+            myPostIdList: userData.myPostIdList ? userData.myPostIdList : [],
+            favPostIdList: userData.favPostIdList ? userData.favPostIdList : [],
+          },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // fetch user data and store to redux state while user login
   useEffect(() => {
@@ -59,7 +54,7 @@ function App() {
       // cleanup function
       return () => unSubscribe();
     });
-  }, [initUser]);
+  }, []);
 
   return (
     <BrowserRouter>
