@@ -41,21 +41,22 @@ export const Auth = ({ isLoginMode }) => {
   };
 
   // signup handler
-  const signUpHandler = async (email, password, username) => {
+  const signUpHandler = async (username, email, password) => {
     setIsLoading(true);
     try {
       await fireAuthSignUp(email, password);
 
       // check authenticated user info
       const user = auth.currentUser;
-      const { uid, displayName } = user;
+      const { uid } = user;
 
       // update displayName to user input name
       await fireAuthUpdate(user, username);
 
       // store user data to firestore
       const userData = {
-        username: displayName,
+        username,
+        userId: uid,
         email,
       };
       await addUserByUserId(userData, uid);

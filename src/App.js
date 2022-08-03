@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -23,27 +23,32 @@ function App() {
   const dispatch = useDispatch();
 
   //TODO: これ外からimportしてもってこられへんかな？Authページでも使い回してます
-  const initUser = async (authUid) => {
-    try {
-      const userFetchResult = await getUserByUserId(authUid);
+  const initUser = useCallback(
+    async (authUid) => {
+      try {
+        const userFetchResult = await getUserByUserId(authUid);
 
-      const userData = userFetchResult.data();
+        const userData = userFetchResult.data();
 
-      dispatch(
-        login({
-          user: {
-            ...userData,
-            myPostIdList: userData.myPostIdList ? userData.myPostIdList : [],
-            favPostIdList: userData.favPostIdList ? userData.favPostIdList : [],
-          },
-        })
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
+        dispatch(
+          login({
+            user: {
+              ...userData,
+              myPostIdList: userData.myPostIdList ? userData.myPostIdList : [],
+              favPostIdList: userData.favPostIdList
+                ? userData.favPostIdList
+                : [],
+            },
+          })
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [dispatch]
+  );
 
-  //fireauthがログインしているなら、ページ遷移したとしてもuserデータをfirestoreからfetchして、redux stateを更新
+  // fetch user data and store to redux state while user login
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, async (authUser) => {
       if (authUser) {
@@ -54,7 +59,7 @@ function App() {
       // cleanup function
       return () => unSubscribe();
     });
-  }, []);
+  }, [initUser]);
 
   return (
     <BrowserRouter>
