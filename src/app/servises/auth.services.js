@@ -35,10 +35,10 @@ export const fireAuthSignOut = async () => {
 };
 
 // update
-export const fireAuthUpdate = async (currentUser, displayName) => {
+export const fireAuthUpdate = async (user, username) => {
   try {
-    return await updateProfile(currentUser, {
-      displayName: displayName,
+    return await updateProfile(user, {
+      displayName: username,
     });
   } catch (error) {
     throw error;

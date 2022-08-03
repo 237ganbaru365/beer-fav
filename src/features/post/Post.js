@@ -8,6 +8,7 @@ import {
 } from "../user/userSlice";
 import {
   addUserFavPostIdList,
+  updateFavListByDeletePostId,
   removeUserFavPostIdList,
   removeUserMyPostIdList,
 } from "../../app/servises/user.services";
@@ -41,7 +42,8 @@ export const Post = ({ name, store, description, imgUrl, author, postId }) => {
       // delete the post from user db
       await removeUserMyPostIdList(authUid, myPostIdList, postId);
 
-      // TODO: also remove the post from someone's favoriteList
+      // remove the post from someone's favoriteList
+      await updateFavListByDeletePostId(postId);
 
       // delete the post from user redux state
       dispatch(
