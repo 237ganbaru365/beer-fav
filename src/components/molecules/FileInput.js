@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 
-export const FileInput = ({ register }) => {
+export const FileInput = ({ register, isAddMode, preloadValues }) => {
   const [imgRef, setImgRef] = useState(null);
 
   const uploadHandler = (e) => {
@@ -22,6 +22,17 @@ export const FileInput = ({ register }) => {
   const resetHandler = (e) => {
     setImgRef(null);
   };
+
+  useEffect(() => {
+    if (isAddMode) {
+      setImgRef(null);
+    } else {
+      setImgRef({
+        fileName: preloadValues.imgName,
+        previewPhoto: preloadValues.imgUrl,
+      });
+    }
+  }, []);
 
   return (
     <div className="FlexCenter mb-8">

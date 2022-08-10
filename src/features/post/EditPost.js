@@ -4,6 +4,7 @@ import { v4 } from "uuid";
 
 import {
   addFileToStorage,
+  getFileDataFromStorage,
   getFileUrlFromStorage,
 } from "../../app/servises/file.services";
 import { getPost, updatePost } from "../../app/servises/post.services";
@@ -17,17 +18,29 @@ export const EditPost = () => {
   const params = useParams();
 
   const [post, setPost] = useState(null);
+  const [fileRef, setFileRef] = useState(null);
   const [isLoading, setIsLoading] = useState();
 
   const postId = params.id;
 
   const editHandler = async (data) => {
     setIsLoading(true);
+
     const { name, store, description } = data;
 
     // create file reference
-    const fileData = data.file[0];
-    const fileName = fileData.name + v4();
+
+    // TODO: もしも画像を変更しなければ、そのまま既存のfileデータを使用する。=> つまり、画像変更してない場合は、storageにaddしなくていい
+    let fileData;
+    let fileName;
+
+    if (fileRef) {
+      fileData = fileRef;
+      fileName = fileRef.name;
+    } else {
+      fileData = data.file[0];
+      fileName = fileData.name + v4();
+    }
 
     try {
       // upload file to firebase storage
@@ -49,7 +62,16 @@ export const EditPost = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getPost(postId);
+
+      //TODO: postのデータだけじゃなくて、storageからfileのリファレンスを取得する必要がある
+      const fileData = await getFileDataFromStorage(
+        "me.jpg4aa2eb82-f058-48cf-b348-adf859b7ce3b"
+      );
+
+      console.log(fileData);
+
       setPost(data.data());
+      setFileRef(fileData);
     };
     fetchData();
   }, [postId]);

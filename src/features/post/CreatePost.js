@@ -36,6 +36,7 @@ export const CreatePost = () => {
     // create file reference
     const fileData = data.file[0];
     const fileName = fileData.name + v4();
+    const imgName = fileData.name;
 
     try {
       // upload file to fire storage
@@ -48,6 +49,7 @@ export const CreatePost = () => {
         store,
         description,
         imgUrl,
+        imgName,
         userId: uid,
         username: displayName,
       };

@@ -47,7 +47,11 @@ export const PostForm = ({
         label="Description"
         sx={{ marginBottom: "2.5rem" }}
       />
-      <FileInput register={register} />
+      <FileInput
+        preloadValues={preloadValues}
+        isAddMode={isAddMode}
+        register={register}
+      />
       <Button
         className="w-4/5"
         content={isAddMode ? "CREATE" : "UPDATE"}

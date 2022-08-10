@@ -36,6 +36,7 @@ export const Auth = ({ isLoginMode }) => {
       await fireAuthSignIn(email, password);
     } catch (error) {
       console.log(error);
+      alert(error.message);
     }
     setIsLoading(false);
   };
